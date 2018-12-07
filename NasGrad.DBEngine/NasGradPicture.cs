@@ -4,6 +4,6 @@
     {
         public string Id { get; set; }
         public string Content { get; set; }
-        public bool Hidden { get; set; }
+        public bool Visible { get; set; }
     }
 }
