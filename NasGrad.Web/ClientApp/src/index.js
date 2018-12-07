@@ -9,7 +9,10 @@ import { createBrowserHistory } from 'history';
 import configureStore from './store/configureStore';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
-import { actionCreators as userActionCreators } from "./store/user.store";
+import { actionCreators as userActionCreators } from './store/users.store';
+import { arrayHelper } from './helpers/array.helper';
+
+arrayHelper();
 
 // Create browser history to use in the Redux store
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');

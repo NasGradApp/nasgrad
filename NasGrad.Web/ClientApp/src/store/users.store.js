@@ -1,7 +1,7 @@
-﻿import * as userService from "../service/user.service";
+﻿import * as usersService from "../service/users.service";
 import { actionTypes, storageKeys } from "../constants";
 
-const userActionType = actionTypes.User;
+const actionType = actionTypes.users;
 
 export const actionCreators = {
     userLogin: (username, password) => async (dispatch, getState) => {
@@ -10,52 +10,46 @@ export const actionCreators = {
             return;
         }
 
-        dispatch({ type: userActionType.loginStarted });
+        dispatch({ type: actionType.loginStarted });
 
-        userService.login(username, password).then(
+        usersService.login(username, password).then(
             user => {
-                userService.saveLoginData(user);
+                usersService.saveLoginData(user);
                 dispatch({
-                    type: userActionType.loginSucceeded,
+                    type: actionType.loginSucceeded,
                     user: user
-                });
-                dispatch({
-                    type: actionTypes.RESET
                 });
             },
             error => {
                 dispatch({
-                    type: userActionType.loginFailed,
+                    type: actionType.loginFailed,
                     error: error
                 });
             }
         );
     },
     userLogout: () => async (dispatch, getState) => {
-        userService.logout();
+        usersService.logout();
         dispatch({
-            type: userActionType.logout
+            type: actionType.logout
         });
     },
     clearError: () => async (dispatch, getState) => {
         dispatch({
-            type: userActionType.clearError
+            type: actionType.clearError
         });
     },
     unauthorized: () => async (dispatch, getState) => {
-        userService.logout();
+        usersService.logout();
         dispatch({
-            type: userActionType.unauthorized
+            type: actionType.unauthorized
         });
     },
     saveUserLogin: (user) => async (dispatch, getState) => {
-        userService.saveLoginData(user);
+        usersService.saveLoginData(user);
         dispatch({
-            type: userActionType.loginSucceeded,
+            type: actionType.loginSucceeded,
             user: user
-        });
-        dispatch({
-            type: actionTypes.RESET
         });
     }
 };
@@ -70,7 +64,7 @@ const initialState = {
 export const reducer = (state, action) => {
     state = state || initialState;
 
-    if (action.type === userActionType.loginStarted) {
+    if (action.type === actionType.loginStarted) {
         return {
             ...state,
             error: null,
@@ -78,7 +72,7 @@ export const reducer = (state, action) => {
         };
     }
 
-    if (action.type === userActionType.loginSucceeded) {
+    if (action.type === actionType.loginSucceeded) {
         return {
             ...state,
             user: action.user,
@@ -87,7 +81,7 @@ export const reducer = (state, action) => {
         };
     }
 
-    if (action.type === userActionType.loginFailed) {
+    if (action.type === actionType.loginFailed) {
         return {
             ...state,
             user: null,
@@ -96,21 +90,21 @@ export const reducer = (state, action) => {
         };
     }
 
-    if (action.type === userActionType.logout) {
+    if (action.type === actionType.logout) {
         return {
             ...state,
             user: null
         };
     }
 
-    if (action.type === userActionType.clearError) {
+    if (action.type === actionType.clearError) {
         return {
             ...state,
             error: null
         };
     }
 
-    if (action.type === userActionType.unauthorized) {
+    if (action.type === actionType.unauthorized) {
         return {
             ...state,
             error: "You are not authorized for requested action.",
