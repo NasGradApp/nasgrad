@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NasGrad.DBEngine;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace NasGrad.API.Controllers
@@ -18,23 +17,26 @@ namespace NasGrad.API.Controllers
 
         // GET: api/Category
         [HttpGet]
-        public async Task<List<NasGradCategory>> Get()
+        public async Task<IActionResult> Get()
         {
-            return await _dbStorage.GetCategories();
+            var result = await _dbStorage.GetCategories();
+            return Ok(result);
         }
 
         // GET: api/Category/5
         [HttpGet("{id}", Name = "Get")]
-        public async Task<NasGradCategory> Get(string id)
+        public async Task<IActionResult> Get(string id)
         {
-            return await _dbStorage.GetCategory(id);
+            var result = await _dbStorage.GetCategory(id);
+            return Ok(result);
         }
 
         //api/Category/GetSelectedCategories?ids=cat1&ids=cat2
         [HttpGet("GetSelectedCategories")]
-        public async Task<List<NasGradCategory>> GetSelectedCategories(string[] ids)
+        public async Task<IActionResult> GetSelectedCategories(string[] ids)
         {
-            return await _dbStorage.GetSelectedCategories(ids);
+            var result = await _dbStorage.GetSelectedCategories(ids);
+            return Ok(result);
         }
 
         //// POST: api/Category
