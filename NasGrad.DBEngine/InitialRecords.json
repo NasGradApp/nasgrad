@@ -1,0 +1,42 @@
+{
+    "types": [
+        {
+            "id": "C9ACEA7E-B44A-45C9-8F5B-2F67B104D491",
+            "name": "type1",
+            "description": "type1 desc",
+            "categories": [
+                {
+                    "id": "299903CE-45FB-45B8-9F9D-EB051C30B44A",
+                    "name": "cat1",
+                    "description": "cat1 desc",
+                    "email": "kontakt@cat1.rs"
+                },
+                {
+                    "id": "20353A32-A60E-47CD-B243-52B2AE282EC1",
+                    "name": "cat2",
+                    "description": "cat2 desc",
+                    "email": "kontakt@cat2.rs"
+                }
+            ]
+        },
+        {
+            "id": "4CA34831-8872-4C63-920C-87EE95619197",
+            "name": "type2",
+			"description": "type2 desc",
+			"categories": [
+				{
+					"id": "299903CE-45FB-45B8-9F9D-EB051C30B44A",
+					"name": "cat1",
+					"description": "cat1 desc",
+					"email": "kontakt@cat1.rs"
+				},
+				{
+				    "id": "7065B665-180B-4AB5-A777-C3B65AF55526",
+				    "name": "cat3",
+				    "description": "cat3 desc",
+				    "email": "kontakt@cat3.rs"
+				}
+			]
+		}
+	]
+}
