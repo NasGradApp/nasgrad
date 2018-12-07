@@ -13,12 +13,12 @@ namespace NasGrad.DBEngine
             _database = database;
         }
 
-        public Task<List<NasGradType>> GetConfiguration()
+        public async Task<List<NasGradType>> GetConfiguration()
         {
             var dbCollection = _database.GetCollection<NasGradType>(Constants.TypeTableName);
-            var result = dbCollection.Find(FilterDefinition<NasGradType>.Empty).ToList();
+            var result = await dbCollection.Find(FilterDefinition<NasGradType>.Empty).ToListAsync();
 
-            return Task.FromResult(result);
+            return result;
         }
     }
 }

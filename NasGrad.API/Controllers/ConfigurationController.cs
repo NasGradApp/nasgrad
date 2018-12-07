@@ -21,9 +21,9 @@ namespace NasGrad.API.Controllers
 
         // GET: api/Configuration
         [HttpGet]
-        public Task<List<NasGradType>> Get()
+        public async Task<List<NasGradType>> Get()
         {
-            return _dbStorage.GetConfiguration();
+            return await _dbStorage.GetConfiguration();
         }
 
         // GET: api/Configuration/5
