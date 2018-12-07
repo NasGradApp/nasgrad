@@ -1,13 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace NasGrad.DBEngine
 {
     public interface IDBStorage
     {
-        Task<NasGradConfiguration> GetConfiguration();
-
+        Task<List<NasGradType>> GetConfiguration();
+        Task<List<NasGradIssue>> GetIssues();
+        Task<NasGradIssue> GetIssue(string issueId);
+        Task<List<NasGradCategory>> GetCategories();
+        Task<List<NasGradCategory>> GetSelectedCategories(string[] ids);
+        Task<NasGradCategory> GetCategory(string id);
+        Task<List<NasGradPicture>> GetPictures();
+        Task<NasGradPicture> GetPicture(string id);
     }
 }

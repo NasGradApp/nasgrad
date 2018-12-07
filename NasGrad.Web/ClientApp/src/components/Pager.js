@@ -6,11 +6,16 @@ class Pager extends Component {
         let pages = (totalPages > 1) ? Array.from(new Array(totalPages), (_, i) => i + 1) : [];
         return (
             <div className="btn-group" role="group">
-                {pages.map(page =>
-                    (<button className='btn btn-default' key={page} disabled={activePage === page} onClick={() => selectPage(page)}>
-                        {page}
-                    </button>)
-                )}
+                {pages.map(page => {
+                    const disabled = activePage === page;
+                    const onClick = () => {
+                        selectPage(page);
+                    };
+                    return (
+                        <button key={page} className='btn btn-default' disabled={disabled} onClick={onClick}>
+                            {page}
+                        </button>);
+                })}
             </div>
         );
     }

@@ -15,6 +15,11 @@ namespace NasGrad.DBEngine
 
         private IMongoDatabase _db;
         private IMongoCollection<NasGradType> _configCollection;
+        private IMongoCollection<NasGradIssue> _issueCollection;
+        private IMongoCollection<NasGradCategory> _categoryCollection;
+        private IMongoCollection<NasGradPicture> _pictureCollection;
+
+        private IDBStorage _dbStorage;
 
         public MongoDBInitializer(string serverAddress, string serverPort, string dbName)
         {
@@ -59,6 +64,9 @@ namespace NasGrad.DBEngine
             Console.WriteLine("Create collections");
 
             _configCollection = _db.GetCollection<NasGradType>(Constants.TypeTableName);
+            _issueCollection = _db.GetCollection<NasGradIssue>(Constants.IssueTableName);
+            _categoryCollection = _db.GetCollection<NasGradCategory>(Constants.CategoryTableName);
+            _pictureCollection = _db.GetCollection<NasGradPicture>(Constants.PictureTableName);
         }
 
         private void Seed()
@@ -73,32 +81,63 @@ namespace NasGrad.DBEngine
             var initialRecords = JsonConvert.DeserializeObject<InitialRecords>(
                 File.ReadAllText(initialRecordsFilePath));
 
+            initialRecords.Categories.ForEach(c =>
+            {
+                if (string.IsNullOrEmpty(c.Id))
+                {
+                    c.Id = Guid.NewGuid().ToString();
+                }
+            });
+
             initialRecords.Types.ForEach(t =>
             {
                 if (string.IsNullOrEmpty(t.Id))
                     t.Id = Guid.NewGuid().ToString();
-
-                t.Categories.ForEach(c =>
-                    {
-                        if (string.IsNullOrEmpty(c.Id))
-                        {
-                            c.Id = Guid.NewGuid().ToString();
-                        }
-                    }
-                    );
             });
 
+            initialRecords.Issues.ForEach(i =>
+            {
+                if (string.IsNullOrEmpty(i.Id))
+                {
+                    i.Id = Guid.NewGuid().ToString();
+                }
+            });
 
-            if (initialRecords.Types != null)
+            initialRecords.Pictures.ForEach(p =>
+            {
+                if (string.IsNullOrEmpty(p.Id))
+                {
+                    p.Id = Guid.NewGuid().ToString();
+                }
+            });
+
+            if (initialRecords.Categories != null && initialRecords.Categories.Count > 0)
+            {
+                _categoryCollection.InsertMany(initialRecords.Categories);
+            }
+
+            if (initialRecords.Types != null && initialRecords.Types.Count > 0)
             {
                 _configCollection.InsertMany(initialRecords.Types);
             }
 
+            if (initialRecords.Issues != null && initialRecords.Issues.Count > 0)
+            {
+                _issueCollection.InsertMany(initialRecords.Issues);
+            }
+
+            if (initialRecords.Pictures != null && initialRecords.Pictures.Count > 0)
+            {
+                _pictureCollection.InsertMany(initialRecords.Pictures);
+            }
         }
     }
 
     internal class InitialRecords
     {
         public List<NasGradType> Types { get; set; }
+        public List<NasGradIssue> Issues { get; set; }
+        public List<NasGradCategory> Categories{ get; set; }
+        public List<NasGradPicture> Pictures { get; set; }
     }
 }

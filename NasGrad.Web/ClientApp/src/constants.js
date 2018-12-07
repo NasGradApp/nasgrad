@@ -6,7 +6,7 @@ export const urlControlers = {
     users: "users"
 };
 
-export const defaultPageSize = 50;
+export const defaultPageSize = 20;
 
 export const storageKeys = {
     user: "SK_USER"
@@ -29,6 +29,7 @@ export const actionTypes = {
     issues: {
         getPageStarted: "ISSUES_GET_PAGE_STARTED",
         getPageSucceeded: "ISSUES_GET_PAGE_SUCCEEDED",
-        getPageFailed: "ISSUES_GET_PAGE_FAILED"
+        getPageFailed: "ISSUES_GET_PAGE_FAILED",
+        setActivePage: "ISSUES_SET_ACTIVE_PAGE"
     }
 };

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace NasGrad.DBEngine
 {
@@ -9,6 +7,6 @@ namespace NasGrad.DBEngine
         public string Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public List<Category> Categories { get; set; }
+        public List<string> Categories { get; set; }
     }
 }

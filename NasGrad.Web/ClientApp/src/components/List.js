@@ -1,27 +1,32 @@
 ﻿import React, { Component } from 'react';
-import Item from './Item';
 import Pager from './Pager';
 
 class List extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
-        const selectPage = page => {
-            this.props.getPage(page);
-        };
+        const { items, activePage, setActivePage, totalPages, empty, itemComponent } = this.props;
+        if (!items || items.length === 0) {
+            return empty;
+        }
+
+        const selectPage = (page) => {
+            setActivePage(page);
+        }
 
         return (
+
             <div>
                 <div>
-                    <Item />
-                    <Item />
-                    <Item />
-                    <Item />
+                    {items.map(item => {
+                        const data = {
+                            item,
+                            key: item.issue.id
+                        };
+
+                        return React.createElement(itemComponent, data);
+                    })}
                 </div>
                 <div>
-                    <Pager selectPage={selectPage} totalPages={5} activePage={2} />
+                    <Pager selectPage={selectPage} activePage={activePage} totalPages={totalPages} />
                 </div>
             </div>
         );

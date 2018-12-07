@@ -19,9 +19,6 @@ export const actionCreators = {
                     type: actionType.loginSucceeded,
                     user: user
                 });
-                dispatch({
-                    type: actionType.RESET
-                });
             },
             error => {
                 dispatch({
@@ -53,9 +50,6 @@ export const actionCreators = {
         dispatch({
             type: actionType.loginSucceeded,
             user: user
-        });
-        dispatch({
-            type: actionTypes.RESET
         });
     }
 };
