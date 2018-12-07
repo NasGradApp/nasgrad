@@ -6,7 +6,7 @@ export const urlControlers = {
     users: "users"
 };
 
-export const defaultPageSize = 1;
+export const defaultPageSize = 20;
 
 export const storageKeys = {
     user: "SK_USER"
