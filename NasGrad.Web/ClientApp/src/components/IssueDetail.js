@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { render } from 'react-dom';
 import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
+import { bindActionCreators } from "redux";
+import { actionCreators as issuesActionCreators } from '../store/issues.store';
 
 class IssueDetail extends Component {
     issueId
@@ -15,8 +17,25 @@ class IssueDetail extends Component {
         super(props);
     }
 
+
+
     render() {
-        const showForm = "true";
+        const { id } = this.props.match.params;
+
+        var listOfIssues = this.props.page.issues.filter(function (issue) {
+            console.log(issue.issue.id);
+            return issue.issue.id === id;
+        });
+
+        var issueObject = listOfIssues[0];
+        var showForm = true;
+        var error = false;
+
+        if (Object.getOwnPropertyNames(issueObject).length === 0) {
+            error = true;
+            showForm = false;
+        }
+        
         const position = [51.505, -0.09];
 
         const openStreetMapBlock = {
@@ -32,18 +51,21 @@ class IssueDetail extends Component {
         const form = (
             <form>
                 <div className="form-group">
-                    <label>Problem:</label>
-                    <input type="text" className="form-control" placeholder="Problem" readOnly="true" />
+                    <label>Naslov</label>
+                    <input type="text" className="form-control" placeholder="Problem" readOnly="true" defaultValue={issueObject.issue.title} />
                 </div>
                 <div className="form-group">
-                    <label>Detalji problema:</label>
-                    <textarea className="form-control" placeholder="Detalji problema" readOnly="true" />
+                    <label>Opis</label>
+                    <textarea className="form-control" placeholder="Detalji problema" readOnly={true} defaultValue={issueObject.issue.description} />
                 </div>
                 <div className="form-group">
                     <label>Kategorije:</label>
                     <ul>
-                        <li>Prva kategorija</li>
-                        <li>Druga kategorija</li>
+                        {issueObject.issue.categories.map((item, rowIndex) =>
+                            (<li key={item}>
+                                {item}
+                            </li>)
+                        )}
                     </ul>
                 </div>
 
@@ -57,16 +79,21 @@ class IssueDetail extends Component {
                     </Marker>
                 </Map>
             </form>
-            
+
+        );
+
+        const errorHappened = (
+            <div className="alert alert-danger col-sm-12">Nothing for update</div>
         );
 
         return (
             <div className="mainbox col-md-offset-3 col-md-6" style={topMargin}>
                 <div className="panel panel-info">
                     <div className="panel-heading">
-                        <div className="panel-title">Opis problema</div>
+                        <div className="panel-title">Problem:</div>
                     </div>
                     <div className="panel-body">
+                        {(error) ? errorHappened : ""}
                         {(showForm) ? form : ""}
                     </div>
                 </div>
@@ -94,4 +121,7 @@ const IssueDetail = props => (
     </div>
 );*/
 
-export default connect()(IssueDetail);
+export default connect(
+    state => state.issues,
+    dispatch => bindActionCreators(issuesActionCreators, dispatch)
+)(IssueDetail);
