@@ -89,5 +89,23 @@ namespace NasGrad.DBEngine
 
             return result[0];
         }
+
+        public async Task<bool> SetVisibility(string id, bool visible)
+        {
+            try
+            {
+                var updatePictureVisibility = Builders<NasGradPicture>.Update.Set(c => c.Visible, visible);
+                var dbCollection = _database.GetCollection<NasGradPicture>(Constants.PictureTableName);
+                await dbCollection.UpdateOneAsync(
+                    Builders<NasGradPicture>.Filter.Eq(d => d.Id, id),
+                    updatePictureVisibility
+                    );
+                return true;
+            }
+            catch (System.Exception e)
+            {
+                throw new MongoDBStorageException($"Error while adding new item in Pictures collection.", e);
+            }
+        }
     }
 }
