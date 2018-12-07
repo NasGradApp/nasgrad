@@ -28,5 +28,17 @@ namespace NasGrad.DBEngine
 
             return result;
         }
+
+        public async Task<NasGradIssueWrapper> GetIssue(string issueId)
+        {
+            var dbCollection = _database.GetCollection<NasGradIssueWrapper>(Constants.IssueWrapperTableName);
+            var result = await dbCollection.Find(i => string.Equals(i.Id, issueId)).ToListAsync();
+            if (result.Count == 0 || result.Count > 1)
+            {
+                return null;
+            }
+
+            return result[0];
+        }
     }
 }

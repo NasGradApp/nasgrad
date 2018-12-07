@@ -7,5 +7,6 @@ namespace NasGrad.DBEngine
     {
         Task<List<NasGradType>> GetConfiguration();
         Task<List<NasGradIssueWrapper>> GetIssues();
+        Task<NasGradIssueWrapper> GetIssue(string issueId);
     }
 }

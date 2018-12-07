@@ -18,6 +18,25 @@ namespace NasGrad.API.Controllers
             _dbStorage = dbStorage;
         }
 
+        [HttpGet("GetIssueDetails/{id}")]
+        public async Task<NasGradIssueWrapper> Get(string issueId)
+        {
+            return await _dbStorage.GetIssue(issueId);
+        }
+
+        [HttpPost("newIssue")]
+        public async Task<IActionResult> Post([FromBody] NasGradIssueWrapper data)
+        {
+            try
+            {
+                var model = new 
+            }
+            catch (Exception e)
+            {
+                throw;
+            }
+        }
+
         [HttpGet]
         public async Task<List<NasGradIssueWrapper>> Get()
         {
