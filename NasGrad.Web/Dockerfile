@@ -11,9 +11,9 @@ RUN apt-get update && \
     apt-get install -y build-essential nodejs
 
 WORKDIR /src
-COPY ["NasGrad.Web/NasGrad.Web.csproj", "NasGrad.Web/"]
+COPY ["NasGrad.Web.csproj", "NasGrad.Web/"]
 RUN dotnet restore "NasGrad.Web/NasGrad.Web.csproj"
-COPY ./ ./
+COPY ./ ./NasGrad.Web
 WORKDIR "/src/NasGrad.Web"
 RUN dotnet build "NasGrad.Web.csproj" -c Release -o /app
 
