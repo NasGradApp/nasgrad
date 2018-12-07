@@ -22,4 +22,7 @@
     <ProjectReference Include="..\NasGrad.DBEngine\NasGrad.DBEngine.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="buildandrunimage.sh" />
+  </ItemGroup>
 </Project>
