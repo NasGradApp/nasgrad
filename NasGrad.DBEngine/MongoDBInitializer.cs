@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace NasGrad.DBEngine
@@ -15,6 +16,9 @@ namespace NasGrad.DBEngine
 
         private IMongoDatabase _db;
         private IMongoCollection<NasGradType> _configCollection;
+        private IMongoCollection<NasGradIssueWrapper> _issueWrapper;
+
+        private IDBStorage _dbStorage;
 
         public MongoDBInitializer(string serverAddress, string serverPort, string dbName)
         {
@@ -36,6 +40,20 @@ namespace NasGrad.DBEngine
                 throw new DbInitializeException("Failed to initialize database.", e);
             }
         }
+
+        //private void test()
+        //{
+        //    var temp = new NasGradIssueWrapper();
+        //    temp.Count = 1;
+        //    temp.Issues = new List<NasGradIssue>();
+        //    var newIssue = new NasGradIssue();
+        //    newIssue.Id = Guid.NewGuid().ToString();
+        //    newIssue.IssueType = new NasGradType() { Id = "C9ACEA7E-B44A-45C9-8F5B-2F67B104D491", 
+        //        Categories = new List<NasGradCategory>() {new NasGradCategory() {Id = "299903CE-45FB-45B8-9F9D-EB051C30B44A"}}};
+        //    temp.Issues.Add(newIssue);
+        //    var result = Newtonsoft.Json.JsonConvert.SerializeObject(temp);
+        //    Console.WriteLine(result);
+        //}
 
         private void CreateDatabase()
         {
@@ -59,6 +77,7 @@ namespace NasGrad.DBEngine
             Console.WriteLine("Create collections");
 
             _configCollection = _db.GetCollection<NasGradType>(Constants.TypeTableName);
+            _issueWrapper = _db.GetCollection<NasGradIssueWrapper>(Constants.IssueWrapperTableName);
         }
 
         private void Seed()
@@ -88,17 +107,31 @@ namespace NasGrad.DBEngine
                     );
             });
 
+            initialRecords.IssueWrapper.Issues.ForEach(i =>
+            {
+                if (string.IsNullOrEmpty(i.Id))
+                {
+                    i.Id = Guid.NewGuid().ToString();
+                }
+
+                //i.IssueType = initialRecords.Types.Where(t => t.Id == i.IssueType)
+            });
 
             if (initialRecords.Types != null)
             {
                 _configCollection.InsertMany(initialRecords.Types);
             }
 
+            if (initialRecords.IssueWrapper != null)
+            {
+                _issueWrapper.InsertOne(initialRecords.IssueWrapper);
+            }
         }
     }
 
     internal class InitialRecords
     {
         public List<NasGradType> Types { get; set; }
+        public NasGradIssueWrapper IssueWrapper { get; set; }
     }
 }
