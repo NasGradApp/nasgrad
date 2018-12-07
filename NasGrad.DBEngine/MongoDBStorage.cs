@@ -1,5 +1,5 @@
 ﻿using MongoDB.Driver;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace NasGrad.DBEngine
@@ -13,12 +13,12 @@ namespace NasGrad.DBEngine
             _database = database;
         }
 
-        public Task<NasGradConfiguration> GetConfiguration()
+        public Task<List<NasGradType>> GetConfiguration()
         {
-            var dbCollection = _database.GetCollection<NasGradConfiguration>(Constants.ConfigurationTableName);
-            var result = dbCollection.Find(FilterDefinition<NasGradConfiguration>.Empty).ToList();
+            var dbCollection = _database.GetCollection<NasGradType>(Constants.TypeTableName);
+            var result = dbCollection.Find(FilterDefinition<NasGradType>.Empty).ToList();
 
-            return Task.FromResult(result.First());
+            return Task.FromResult(result);
         }
     }
 }

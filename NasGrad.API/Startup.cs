@@ -32,6 +32,17 @@ namespace NasGrad.API
             {
                 options.SwaggerDoc("v1", new Info() { Title = "NasGrad API", Version = "v1" });
             });
+
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
+
+            var appSettings = appSettingsSection.Get<AppSettings>();
+            var dbSettings = appSettings.DB;
+
+            var connectionString = $"mongodb://{dbSettings.ServerAddress}:{dbSettings.ServerPort}"; 
+            var mongoDatabase = new MongoDB.Driver.MongoClient(connectionString).GetDatabase(dbSettings.DbName);
+            services.AddSingleton(typeof(MongoDB.Driver.IMongoDatabase), mongoDatabase);
+            services.AddSingleton<DBEngine.IDBStorage, DBEngine.MongoDBStorage>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
