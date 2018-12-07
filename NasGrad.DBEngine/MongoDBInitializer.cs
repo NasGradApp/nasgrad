@@ -17,6 +17,7 @@ namespace NasGrad.DBEngine
         private IMongoCollection<NasGradType> _configCollection;
         private IMongoCollection<NasGradIssue> _issueCollection;
         private IMongoCollection<NasGradCategory> _categoryCollection;
+        private IMongoCollection<NasGradPicture> _pictureCollection;
 
         private IDBStorage _dbStorage;
 
@@ -40,20 +41,6 @@ namespace NasGrad.DBEngine
                 throw new DbInitializeException("Failed to initialize database.", e);
             }
         }
-
-        //private void test()
-        //{
-        //    var temp = new NasGradIssueWrapper();
-        //    temp.Count = 1;
-        //    temp.Issues = new List<NasGradIssue>();
-        //    var newIssue = new NasGradIssue();
-        //    newIssue.Id = Guid.NewGuid().ToString();
-        //    newIssue.IssueType = new NasGradType() { Id = "C9ACEA7E-B44A-45C9-8F5B-2F67B104D491", 
-        //        Categories = new List<NasGradCategory>() {new NasGradCategory() {Id = "299903CE-45FB-45B8-9F9D-EB051C30B44A"}}};
-        //    temp.Issues.Add(newIssue);
-        //    var result = Newtonsoft.Json.JsonConvert.SerializeObject(temp);
-        //    Console.WriteLine(result);
-        //}
 
         private void CreateDatabase()
         {
@@ -79,6 +66,7 @@ namespace NasGrad.DBEngine
             _configCollection = _db.GetCollection<NasGradType>(Constants.TypeTableName);
             _issueCollection = _db.GetCollection<NasGradIssue>(Constants.IssueTableName);
             _categoryCollection = _db.GetCollection<NasGradCategory>(Constants.CategoryTableName);
+            _pictureCollection = _db.GetCollection<NasGradPicture>(Constants.PictureTableName);
         }
 
         private void Seed()
@@ -115,6 +103,14 @@ namespace NasGrad.DBEngine
                 }
             });
 
+            initialRecords.Pictures.ForEach(p =>
+            {
+                if (string.IsNullOrEmpty(p.Id))
+                {
+                    p.Id = Guid.NewGuid().ToString();
+                }
+            });
+
             if (initialRecords.Categories != null && initialRecords.Categories.Count > 0)
             {
                 _categoryCollection.InsertMany(initialRecords.Categories);
@@ -129,6 +125,11 @@ namespace NasGrad.DBEngine
             {
                 _issueCollection.InsertMany(initialRecords.Issues);
             }
+
+            if (initialRecords.Pictures != null && initialRecords.Pictures.Count > 0)
+            {
+                _pictureCollection.InsertMany(initialRecords.Pictures);
+            }
         }
     }
 
@@ -137,5 +138,6 @@ namespace NasGrad.DBEngine
         public List<NasGradType> Types { get; set; }
         public List<NasGradIssue> Issues { get; set; }
         public List<NasGradCategory> Categories{ get; set; }
+        public List<NasGradPicture> Pictures { get; set; }
     }
 }

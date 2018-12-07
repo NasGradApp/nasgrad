@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NasGrad.DBEngine;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace NasGrad.API.Controllers
@@ -18,9 +17,10 @@ namespace NasGrad.API.Controllers
 
         // GET: api/Configuration
         [HttpGet]
-        public async Task<List<NasGradType>> Get()
+        public async Task<IActionResult> Get()
         {
-            return await _dbStorage.GetConfiguration();
+            var result = await _dbStorage.GetConfiguration();
+            return Ok(result);
         }
 
         //// GET: api/Configuration/5
