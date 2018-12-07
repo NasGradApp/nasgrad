@@ -1,0 +1,35 @@
+version: '3.4'
+
+services:
+  nasgradweb:
+    build:
+      context: .
+      dockerfile: NasGrad.Web/Dockerfile
+      args: 
+        ADDRESS_OF_API: http://${HOST_CURRENT_ADDRESS}:8080 
+    image:
+      nasgradweb
+    ports:
+     - "80:80"
+    networks:
+     - nasgrad-network
+
+  nasgradapi:
+    build:
+      context: .
+      dockerfile: NasGrad.API/Dockerfile
+      args: 
+        SETTINGS_FILE: "appsettings-api.json"
+    image: 
+      nasgradapi
+    ports:
+     - "8080:80"
+    networks:
+     - nasgrad-network
+
+  mongo:
+    image: mongo
+  
+networks:
+  nasgrad-network:
+    driver: bridge

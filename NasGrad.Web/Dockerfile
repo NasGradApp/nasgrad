@@ -11,10 +11,18 @@ RUN apt-get update && \
     apt-get install -y build-essential nodejs
 
 WORKDIR /src
+
+ARG ADDRESS_OF_API
+ENV ADDRESS_OF_API=$ADDRESS_OF_API
+
 COPY ["NasGrad.Web.csproj", "NasGrad.Web/"]
 RUN dotnet restore "NasGrad.Web/NasGrad.Web.csproj"
-COPY ./ ./NasGrad.Web
-WORKDIR "/src/NasGrad.Web"
+COPY ./ ./
+WORKDIR /src/NasGrad.Web
+
+RUN rm ClientApp/src/apiConfig.js
+RUn echo "export const host=\""$ADDRESS_OF_API"\";" > ClientApp/src/apiConfig.js
+
 RUN dotnet build "NasGrad.Web.csproj" -c Release -o /app
 
 FROM build AS publish
