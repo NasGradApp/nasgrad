@@ -20,13 +20,19 @@ class IssueDetail extends Component {
     constructor(props) {
         super(props);
     }
+    updatedIssueObject
 
     mapRef = createRef()
+
+    updateIssue(e) {
+        this.updatedIssueObject.pictures.visible === true;
+        this.props.updateIssue(this.updateIssue.id, this.updatedIssueObject);
+    }
 
     render() {
         const { id } = this.props.match.params;
 
-        var listOfIssues = this.props.page.issues.filter(function (issue) {
+        var listOfIssues = this.props.data.issues.filter(function (issue) {
             console.log(issue.issue.id);
             return issue.issue.id === id;
         });
@@ -39,9 +45,13 @@ class IssueDetail extends Component {
             error = true;
             showForm = false;
         }
+
+        this.updatedIssueObject = issueObject.issue;
+
         const dLat = issueObject.issue.location.langitude;
         const dLng = issueObject.issue.location.longitude;
         const picture = issueObject.issue.pictures.content;
+        const isPictureVisible = issueObject.issue.pictures.visible;
 
         const hasLocation = (dLat && dLng);
         const locationPin = hasLocation ? L.latLng(dLat, dLng) : null;
@@ -49,7 +59,44 @@ class IssueDetail extends Component {
         const errorHappened = (
             <div className="alert alert-danger col-sm-12">Nothing for update</div>
         );
+
+        const approveButton = (isPictureVisible) ? (
+            <Button
+                bsStyle="info"
+                href="#" type="submit"
+                onClick={this.updateIssue(this)}
+                disabled
+            >Approve
+                                            </Button>
+        ) : (<Button
+            bsStyle="info"
+                href="#" type="submit"
+                onClick={this.updateIssue(this)}
+        >Approve
+                                            </Button>);
         
+
+        const clickOnHide = (
+            isPictureVisible === false
+        );
+
+        const hideButton = (isPictureVisible) ? (
+            <Button
+                bsStyle="info"
+                href="#"
+                type="submit"
+                onClick={clickOnHide}
+            >Hide
+             </Button>
+        ) : (<Button
+            bsStyle="info"
+            href="#"
+            type="submit"
+            onClick={clickOnHide}
+            disabled
+        >Hide
+            </Button>);
+
         const form = (
             <form>
                 <div className="form-group">
@@ -124,19 +171,9 @@ class IssueDetail extends Component {
                         <div className="topMargin">
                             <ButtonGroup justified >
                                 <OverlayTrigger delay={750} trigger={['hover', 'focus']} placement="bottom" >
-                                    <Button
-                                        bsStyle="info"
-                                        href="#" type="submit"
-                                    >Burn
-                                            </Button>
+                                    {approveButton}
                                 </OverlayTrigger>
-
-                                <Button
-                                    bsStyle="info"
-                                    href="#"
-                                    type="submit"
-                                >Mint
-                                        </Button>
+                                {hideButton}
                             </ButtonGroup>
                         </div>
                     </div>
