@@ -29,3 +29,9 @@ ReactDOM.render(
     rootElement);
 
 registerServiceWorker();
+
+// need to be global function because of circular referencing
+window.handleHttp401 = function () {
+    userActionCreators.unauthorized()(store.dispatch);
+    store.dispatch(push("/login"));
+};
