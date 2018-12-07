@@ -6,6 +6,6 @@ namespace NasGrad.DBEngine
     public interface IDBStorage
     {
         Task<List<NasGradType>> GetConfiguration();
-
+        Task<List<NasGradIssueWrapper>> GetIssues();
     }
 }
