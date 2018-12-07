@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using NasGrad.DBEngine;
 using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace NasGrad.API.Controllers
 {
@@ -11,10 +11,17 @@ namespace NasGrad.API.Controllers
     [ApiController]
     public class GetIssueListController : ControllerBase
     {
-        [HttpGet]
-        public ActionResult<string> Get()
+        private IDBStorage _dbStorage;
+
+        public GetIssueListController(IDBStorage dbStorage)
         {
-            return GetIssues();
+            _dbStorage = dbStorage;
+        }
+
+        [HttpGet]
+        public async Task<List<NasGradIssueWrapper>> Get()
+        {
+            return await _dbStorage.GetIssues();
         }
 
         private string GetIssues()

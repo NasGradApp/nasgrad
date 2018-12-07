@@ -20,5 +20,13 @@ namespace NasGrad.DBEngine
 
             return result;
         }
+
+        public async Task<List<NasGradIssueWrapper>> GetIssues()
+        {
+            var dbCollection = _database.GetCollection<NasGradIssueWrapper>(Constants.IssueWrapperTableName);
+            var result = await dbCollection.Find(FilterDefinition<NasGradIssueWrapper>.Empty).ToListAsync();
+
+            return result;
+        }
     }
 }

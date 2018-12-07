@@ -107,6 +107,11 @@ namespace NasGrad.DBEngine
                     );
             });
 
+            if (string.IsNullOrEmpty(initialRecords.IssueWrapper.Id))
+            {
+                initialRecords.IssueWrapper.Id = Guid.NewGuid().ToString();
+            }
+
             initialRecords.IssueWrapper.Issues.ForEach(i =>
             {
                 if (string.IsNullOrEmpty(i.Id))
