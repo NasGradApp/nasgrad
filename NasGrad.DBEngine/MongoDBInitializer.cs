@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 
 namespace NasGrad.DBEngine
@@ -16,7 +15,8 @@ namespace NasGrad.DBEngine
 
         private IMongoDatabase _db;
         private IMongoCollection<NasGradType> _configCollection;
-        private IMongoCollection<NasGradIssueWrapper> _issueWrapper;
+        private IMongoCollection<NasGradIssue> _issueCollection;
+        private IMongoCollection<NasGradCategory> _categoryCollection;
 
         private IDBStorage _dbStorage;
 
@@ -77,7 +77,8 @@ namespace NasGrad.DBEngine
             Console.WriteLine("Create collections");
 
             _configCollection = _db.GetCollection<NasGradType>(Constants.TypeTableName);
-            _issueWrapper = _db.GetCollection<NasGradIssueWrapper>(Constants.IssueWrapperTableName);
+            _issueCollection = _db.GetCollection<NasGradIssue>(Constants.IssueTableName);
+            _categoryCollection = _db.GetCollection<NasGradCategory>(Constants.CategoryTableName);
         }
 
         private void Seed()
@@ -92,44 +93,41 @@ namespace NasGrad.DBEngine
             var initialRecords = JsonConvert.DeserializeObject<InitialRecords>(
                 File.ReadAllText(initialRecordsFilePath));
 
+            initialRecords.Categories.ForEach(c =>
+            {
+                if (string.IsNullOrEmpty(c.Id))
+                {
+                    c.Id = Guid.NewGuid().ToString();
+                }
+            });
+
             initialRecords.Types.ForEach(t =>
             {
                 if (string.IsNullOrEmpty(t.Id))
                     t.Id = Guid.NewGuid().ToString();
-
-                t.Categories.ForEach(c =>
-                    {
-                        if (string.IsNullOrEmpty(c.Id))
-                        {
-                            c.Id = Guid.NewGuid().ToString();
-                        }
-                    }
-                    );
             });
 
-            if (string.IsNullOrEmpty(initialRecords.IssueWrapper.Id))
-            {
-                initialRecords.IssueWrapper.Id = Guid.NewGuid().ToString();
-            }
-
-            initialRecords.IssueWrapper.Issues.ForEach(i =>
+            initialRecords.Issues.ForEach(i =>
             {
                 if (string.IsNullOrEmpty(i.Id))
                 {
                     i.Id = Guid.NewGuid().ToString();
                 }
-
-                //i.IssueType = initialRecords.Types.Where(t => t.Id == i.IssueType)
             });
 
-            if (initialRecords.Types != null)
+            if (initialRecords.Categories != null && initialRecords.Categories.Count > 0)
+            {
+                _categoryCollection.InsertMany(initialRecords.Categories);
+            }
+
+            if (initialRecords.Types != null && initialRecords.Types.Count > 0)
             {
                 _configCollection.InsertMany(initialRecords.Types);
             }
 
-            if (initialRecords.IssueWrapper != null)
+            if (initialRecords.Issues != null && initialRecords.Issues.Count > 0)
             {
-                _issueWrapper.InsertOne(initialRecords.IssueWrapper);
+                _issueCollection.InsertMany(initialRecords.Issues);
             }
         }
     }
@@ -137,6 +135,7 @@ namespace NasGrad.DBEngine
     internal class InitialRecords
     {
         public List<NasGradType> Types { get; set; }
-        public NasGradIssueWrapper IssueWrapper { get; set; }
+        public List<NasGradIssue> Issues { get; set; }
+        public List<NasGradCategory> Categories{ get; set; }
     }
 }
