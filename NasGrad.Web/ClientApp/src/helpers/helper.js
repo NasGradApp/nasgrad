@@ -1,13 +1,4 @@
-﻿import { authHeader } from "../helpers/auth.helpers";
-
-export const defaultHeaders = () => {
-    return {
-        ...authHeader(),
-        "Content-Type": "application/json"
-    };
-};
-
-export const handleResponse = (response) => {
+﻿export const handleResponse = (response) => {
     return new Promise((resolve, reject) => {
         if (response.ok) {
             // return json if it was returned in the response
@@ -23,7 +14,6 @@ export const handleResponse = (response) => {
         } else if (response.status === 403) {
             reject(response.statusText);
         } else {
-
             response.text().then(text => reject(text));
         }
     });
