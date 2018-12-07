@@ -1,4 +1,4 @@
-import { storageKeys } from "../constants";
+import { storageKeys } from '../constants';
 
 export const headers = (withAuth) => {
     const user = JSON.parse(localStorage.getItem(storageKeys.user));
