@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NasGrad.DBEngine;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace NasGrad.API.Controllers
@@ -17,17 +16,18 @@ namespace NasGrad.API.Controllers
         }
 
         [HttpGet("GetIssueDetails/{id}")]
-        public async Task<NasGradIssue> Get(string id)
+        public async Task<IActionResult> Get(string id)
         {
-            return await _dbStorage.GetIssue(id);
+            var result = await _dbStorage.GetIssue(id);
+            return Ok(result);
         }
 
         [HttpGet]
-        public async Task<List<NasGradIssue>> Get()
+        public async Task<IActionResult> Get()
         {
-            return await _dbStorage.GetIssues();
+            var result = await _dbStorage.GetIssues();
+            return Ok(result);
         }
-
     }
 }
 

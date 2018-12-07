@@ -6,46 +6,38 @@ namespace NasGrad.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class PictureController : ControllerBase
     {
         private IDBStorage _dbStorage;
 
-        public CategoryController(IDBStorage dbStorage)
+        public PictureController(IDBStorage dbStorage)
         {
             _dbStorage = dbStorage;
         }
 
-        // GET: api/Category
+        // GET: api/Picture
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var result = await _dbStorage.GetCategories();
+            var result = await _dbStorage.GetPictures();
             return Ok(result);
         }
 
-        // GET: api/Category/5
-        [HttpGet("{id}", Name = "GetCategory")]
+        // GET: api/Picture/5
+        [HttpGet("{id}", Name = "GetPicture")]
         public async Task<IActionResult> Get(string id)
         {
-            var result = await _dbStorage.GetCategory(id);
+            var result = await _dbStorage.GetPicture(id);
             return Ok(result);
         }
 
-        //api/Category/GetSelectedCategories?ids=cat1&ids=cat2
-        [HttpGet("GetSelectedCategories")]
-        public async Task<IActionResult> GetSelectedCategories(string[] ids)
-        {
-            var result = await _dbStorage.GetSelectedCategories(ids);
-            return Ok(result);
-        }
-
-        //// POST: api/Category
+        //// POST: api/Picture
         //[HttpPost]
         //public void Post([FromBody] string value)
         //{
         //}
 
-        //// PUT: api/Category/5
+        //// PUT: api/Picture/5
         //[HttpPut("{id}")]
         //public void Put(int id, [FromBody] string value)
         //{
