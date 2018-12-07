@@ -1,5 +1,5 @@
 ﻿import * as userService from "../service/user.service";
-import { actionTypes, localStorageKeys } from "../constants";
+import { actionTypes, storageKeys } from "../constants";
 
 const userActionType = actionTypes.User;
 
@@ -14,7 +14,7 @@ export const actionCreators = {
 
         userService.login(username, password).then(
             user => {
-                userService.saveLoginData(user, user.username);
+                userService.saveLoginData(user);
                 dispatch({
                     type: userActionType.loginSucceeded,
                     user: user
@@ -49,7 +49,7 @@ export const actionCreators = {
         });
     },
     saveUserLogin: (user) => async (dispatch, getState) => {
-        userService.saveLoginData(user, user.username);
+        userService.saveLoginData(user);
         dispatch({
             type: userActionType.loginSucceeded,
             user: user
@@ -62,7 +62,7 @@ export const actionCreators = {
 
 // initial store state
 const initialState = {
-    user: JSON.parse(localStorage.getItem(localStorageKeys.user)),
+    user: JSON.parse(localStorage.getItem(storageKeys.user)),
     error: null,
     isLoading: false
 };
