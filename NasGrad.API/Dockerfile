@@ -4,10 +4,10 @@ EXPOSE 80
 
 FROM microsoft/dotnet:2.1-sdk AS build
 WORKDIR /src
-COPY ["NasGrad.API/NasGrad.API.csproj", "NasGrad.API/"]
+COPY ["NasGrad.API.csproj", "NasGrad.API/"]
 RUN dotnet restore "NasGrad.API/NasGrad.API.csproj"
 
-COPY . ./
+COPY ./ ./NasGrad.API
 WORKDIR "/src/NasGrad.API"
 RUN dotnet build "NasGrad.API.csproj" -c Release -o /app
 
