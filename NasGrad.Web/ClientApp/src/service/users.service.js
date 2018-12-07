@@ -1,6 +1,6 @@
-﻿import { apiUrl, storageKeys, urlControlers } from "../constants";
-import { handleResponse } from "../helpers/helper";
-import { headers } from "../helpers/http.helpers";
+﻿import { apiUrl, storageKeys, urlControlers } from '../constants';
+import { handleResponse } from '../helpers/helper';
+import { headers } from '../helpers/http.helpers';
 
 export const login = (username, password) => {
     const requestOptions = {

@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 
 namespace NasGrad.DBEngine
@@ -16,7 +15,9 @@ namespace NasGrad.DBEngine
 
         private IMongoDatabase _db;
         private IMongoCollection<NasGradType> _configCollection;
-        private IMongoCollection<NasGradIssueWrapper> _issueWrapper;
+        private IMongoCollection<NasGradIssue> _issueCollection;
+        private IMongoCollection<NasGradCategory> _categoryCollection;
+        private IMongoCollection<NasGradPicture> _pictureCollection;
 
         private IDBStorage _dbStorage;
 
@@ -41,20 +42,6 @@ namespace NasGrad.DBEngine
             }
         }
 
-        //private void test()
-        //{
-        //    var temp = new NasGradIssueWrapper();
-        //    temp.Count = 1;
-        //    temp.Issues = new List<NasGradIssue>();
-        //    var newIssue = new NasGradIssue();
-        //    newIssue.Id = Guid.NewGuid().ToString();
-        //    newIssue.IssueType = new NasGradType() { Id = "C9ACEA7E-B44A-45C9-8F5B-2F67B104D491", 
-        //        Categories = new List<NasGradCategory>() {new NasGradCategory() {Id = "299903CE-45FB-45B8-9F9D-EB051C30B44A"}}};
-        //    temp.Issues.Add(newIssue);
-        //    var result = Newtonsoft.Json.JsonConvert.SerializeObject(temp);
-        //    Console.WriteLine(result);
-        //}
-
         private void CreateDatabase()
         {
             Console.WriteLine("Create database");
@@ -77,7 +64,9 @@ namespace NasGrad.DBEngine
             Console.WriteLine("Create collections");
 
             _configCollection = _db.GetCollection<NasGradType>(Constants.TypeTableName);
-            _issueWrapper = _db.GetCollection<NasGradIssueWrapper>(Constants.IssueWrapperTableName);
+            _issueCollection = _db.GetCollection<NasGradIssue>(Constants.IssueTableName);
+            _categoryCollection = _db.GetCollection<NasGradCategory>(Constants.CategoryTableName);
+            _pictureCollection = _db.GetCollection<NasGradPicture>(Constants.PictureTableName);
         }
 
         private void Seed()
@@ -92,44 +81,54 @@ namespace NasGrad.DBEngine
             var initialRecords = JsonConvert.DeserializeObject<InitialRecords>(
                 File.ReadAllText(initialRecordsFilePath));
 
+            initialRecords.Categories.ForEach(c =>
+            {
+                if (string.IsNullOrEmpty(c.Id))
+                {
+                    c.Id = Guid.NewGuid().ToString();
+                }
+            });
+
             initialRecords.Types.ForEach(t =>
             {
                 if (string.IsNullOrEmpty(t.Id))
                     t.Id = Guid.NewGuid().ToString();
-
-                t.Categories.ForEach(c =>
-                    {
-                        if (string.IsNullOrEmpty(c.Id))
-                        {
-                            c.Id = Guid.NewGuid().ToString();
-                        }
-                    }
-                    );
             });
 
-            if (string.IsNullOrEmpty(initialRecords.IssueWrapper.Id))
-            {
-                initialRecords.IssueWrapper.Id = Guid.NewGuid().ToString();
-            }
-
-            initialRecords.IssueWrapper.Issues.ForEach(i =>
+            initialRecords.Issues.ForEach(i =>
             {
                 if (string.IsNullOrEmpty(i.Id))
                 {
                     i.Id = Guid.NewGuid().ToString();
                 }
-
-                //i.IssueType = initialRecords.Types.Where(t => t.Id == i.IssueType)
             });
 
-            if (initialRecords.Types != null)
+            initialRecords.Pictures.ForEach(p =>
+            {
+                if (string.IsNullOrEmpty(p.Id))
+                {
+                    p.Id = Guid.NewGuid().ToString();
+                }
+            });
+
+            if (initialRecords.Categories != null && initialRecords.Categories.Count > 0)
+            {
+                _categoryCollection.InsertMany(initialRecords.Categories);
+            }
+
+            if (initialRecords.Types != null && initialRecords.Types.Count > 0)
             {
                 _configCollection.InsertMany(initialRecords.Types);
             }
 
-            if (initialRecords.IssueWrapper != null)
+            if (initialRecords.Issues != null && initialRecords.Issues.Count > 0)
             {
-                _issueWrapper.InsertOne(initialRecords.IssueWrapper);
+                _issueCollection.InsertMany(initialRecords.Issues);
+            }
+
+            if (initialRecords.Pictures != null && initialRecords.Pictures.Count > 0)
+            {
+                _pictureCollection.InsertMany(initialRecords.Pictures);
             }
         }
     }
@@ -137,6 +136,8 @@ namespace NasGrad.DBEngine
     internal class InitialRecords
     {
         public List<NasGradType> Types { get; set; }
-        public NasGradIssueWrapper IssueWrapper { get; set; }
+        public List<NasGradIssue> Issues { get; set; }
+        public List<NasGradCategory> Categories{ get; set; }
+        public List<NasGradPicture> Pictures { get; set; }
     }
 }

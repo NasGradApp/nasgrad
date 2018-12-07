@@ -1,11 +1,13 @@
 ﻿import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import { routerReducer, routerMiddleware } from 'react-router-redux';
-import * as userStore from './user.store';
+import * as usersStore from './users.store';
+import * as issuesStore from './issues.store';
 
 export default function configureStore(history, initialState) {
     const reducers = {
-        user: userStore.reducer
+        users: usersStore.reducer,
+        issues: issuesStore.reducer
     };
 
     const middleware = [
