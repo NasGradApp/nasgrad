@@ -4,19 +4,18 @@ import { render } from 'react-dom';
 import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
 import { bindActionCreators } from "redux";
 import { actionCreators as issuesActionCreators } from '../store/issues.store';
+import { Button, ButtonGroup, FormControl, Well, Label, Panel, FormGroup, HelpBlock, Popover, OverlayTrigger } from "react-bootstrap";
 
 import L from "leaflet";
 import "../leaflet/leaflet.css";
 import "../leaflet/mapstyledevice.css";
 import "../style/openStreetMap.css";
+import "../style/pictureSettup.css";
+import "../style/row.css";
+import "../style/column.css";
+import "../style/topMargin.css";
 
 class IssueDetail extends Component {
-    issueId
-    issueTitle
-    issueDescription
-    issueLng
-    issueLat
-    issueStatus
 
     constructor(props) {
         super(props);
@@ -42,20 +41,15 @@ class IssueDetail extends Component {
         }
         const dLat = issueObject.issue.location.langitude;
         const dLng = issueObject.issue.location.longitude;
+        const picture = issueObject.issue.pictures.content;
 
         const hasLocation = (dLat && dLng);
         const locationPin = hasLocation ? L.latLng(dLat, dLng) : null;
 
-        const openStreetMapBlock = {
-            clear: "both",
-            display: "block",
-            marginTop: "20px"
-        };
-
-        const topMargin = {
-            marginTop: "20px"
-        };
-
+        const errorHappened = (
+            <div className="alert alert-danger col-sm-12">Nothing for update</div>
+        );
+        
         const form = (
             <form>
                 <div className="form-group">
@@ -96,32 +90,55 @@ class IssueDetail extends Component {
                                 attribution="&amp;copy <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
                                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                             />
-                            {marker}
+                            <Marker position={locationPin}>
+                                <Popup>This is a device location</Popup>
+                            </Marker>
                         </Map>
                     </div> : null
                 }
+
             </form>
         );
 
-        const marker = (hasLocation && locationPin) ? (
-            <Marker position={locationPin}>
-                <Popup>This is a device location</Popup>
-            </Marker>
-        ) : null
-
-        const errorHappened = (
-            <div className="alert alert-danger col-sm-12">Nothing for update</div>
-        );
-
         return (
-            <div className="mainbox col-md-offset-3 col-md-6" style={topMargin}>
-                <div className="panel panel-info">
-                    <div className="panel-heading">
-                        <div className="panel-title">Problem:</div>
+            <div className="row">
+                <div className="column">
+                    <div className="panel panel-info">
+                        <div className="panel-heading">
+                            <div className="panel-title">Problem:</div>
+                        </div>
+                        <div className="panel-body">
+                            {(error) ? errorHappened : ""}
+                            {(showForm) ? form : ""}
+                        </div>
                     </div>
-                    <div className="panel-body">
-                        {(error) ? errorHappened : ""}
-                        {(showForm) ? form : ""}
+                </div>
+                <div className="column">
+                    <div className="panel panel-info">
+                        <div className="panel-heading">
+                            <div className="panel-title">Slike:</div>
+                        </div>
+                        <div >
+                            <img src={picture} className="pictureSettup" />
+                        </div>
+                        <div className="topMargin">
+                            <ButtonGroup justified >
+                                <OverlayTrigger delay={750} trigger={['hover', 'focus']} placement="bottom" >
+                                    <Button
+                                        bsStyle="info"
+                                        href="#" type="submit"
+                                    >Burn
+                                            </Button>
+                                </OverlayTrigger>
+
+                                <Button
+                                    bsStyle="info"
+                                    href="#"
+                                    type="submit"
+                                >Mint
+                                        </Button>
+                            </ButtonGroup>
+                        </div>
                     </div>
                 </div>
             </div>

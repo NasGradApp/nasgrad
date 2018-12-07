@@ -1,0 +1,7 @@
+﻿
+.column {
+    flex: 50%;
+    column-gap: 40px;
+    -webkit-column-gap: 40px;
+    -moz-column-gap: 40px;
+}
