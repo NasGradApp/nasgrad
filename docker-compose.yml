@@ -19,7 +19,7 @@ services:
       context: .
       dockerfile: NasGrad.API/Dockerfile
       args: 
-        SETTINGS_FILE: "appsettings-api.json"
+        APPLICATION_SETTINGS: "appsettings-api.json"
     image: 
       nasgradapi
     ports:
