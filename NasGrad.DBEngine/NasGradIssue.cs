@@ -13,7 +13,7 @@ namespace NasGrad.DBEngine
         public List<string> Pictures { get; set; }
         public List<string> Categories { get; set; }
         public IssueLocation Location { get; set; }
-        public byte[] PicturePreview { get; set; }
+        public string PicturePreview { get; set; }
     }
 
     public enum StateEnum
