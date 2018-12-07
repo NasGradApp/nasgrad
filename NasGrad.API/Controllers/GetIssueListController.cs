@@ -92,7 +92,7 @@ namespace NasGrad.API.Controllers
 
             JArray isss = new JArray();
 
-           var pic1 = System.IO.File.ReadAllBytes("./test_prev.jpg");
+            var pic1 = new byte[] { 0x0, 0x1, 0x2 };//System.IO.File.ReadAllBytes("./test_prev.jpg");
 
             isss.Add(new JObject{
                 {"issue",issue1 },
