@@ -13,5 +13,6 @@ namespace NasGrad.DBEngine
         Task<NasGradCategory> GetCategory(string id);
         Task<List<NasGradPicture>> GetPictures();
         Task<NasGradPicture> GetPicture(string id);
+        Task<bool> SetVisibility(string id, bool visible);
     }
 }
