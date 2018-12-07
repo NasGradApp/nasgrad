@@ -69,5 +69,25 @@ namespace NasGrad.DBEngine
 
             return result[0];
         }
+
+        public async Task<List<NasGradPicture>> GetPictures()
+        {
+            var dbCollection = _database.GetCollection<NasGradPicture>(Constants.PictureTableName);
+            var result = await dbCollection.Find(FilterDefinition<NasGradPicture>.Empty).ToListAsync();
+
+            return result;
+        }
+
+        public async Task<NasGradPicture> GetPicture(string id)
+        {
+            var dbCollection = _database.GetCollection<NasGradPicture>(Constants.PictureTableName);
+            var result = await dbCollection.Find(c => string.Equals(c.Id, id)).ToListAsync();
+            if (result.Count == 0 || result.Count > 1)
+            {
+                return null;
+            }
+
+            return result[0];
+        }
     }
 }
