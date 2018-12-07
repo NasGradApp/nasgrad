@@ -13,10 +13,11 @@ export const actionCreators = {
         dispatch({ type: actionType.getPageStarted });
 
         issuesService.getPage(page, pageSize).then(
-            page => {
+            data => {
                 dispatch({
                     type: actionType.getPageSucceeded,
-                    page: page
+                    page: data,
+                    activePage: page
                 });
             },
             error => {
@@ -26,6 +27,12 @@ export const actionCreators = {
                 });
             }
         );
+    },
+    setActivePage: (page) => async (dispatch, getState) => {
+        dispatch({
+            type: actionType.setActivePage,
+            activePage: page
+        });
     },
 
     getItem: () => { }
@@ -85,7 +92,8 @@ const initialState = {
                 "picture-preview": "AAEC"
             }
         ]
-    }
+    },
+    activePage: 1
 };
 
 export const reducer = (state, action) => {
@@ -114,6 +122,13 @@ export const reducer = (state, action) => {
             page: null,
             error: action.error,
             isLoading: false
+        };
+    }
+
+    if (action.type === actionType.setActivePage) {
+        return {
+            ...state,
+            activePage: action.activePage
         };
     }
 

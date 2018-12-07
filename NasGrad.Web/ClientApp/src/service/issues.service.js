@@ -8,13 +8,13 @@ export const getPage = (page, pageSize) => {
         headers: headers(true)
     };
 
-    // if (!page) {
-    //     page = 1;
-    // }
-    // 
-    // if (!pageSize) {
-    //     pageSize = defaultPageSize;
-    // }
+    if (!page) {
+        page = 1;
+    }
+    
+    if (!pageSize) {
+        pageSize = defaultPageSize;
+    }
     // http://68.183.223.223:8080/api/getissuelist
     // const url = apiUrl + `/${apiControllerName.issues}?page=${page}&pageSize=${pageSize}`;
     const url = apiUrl + '/getissuelist';

@@ -1,16 +1,16 @@
 ﻿import React, { Component } from 'react';
 
-class Item extends Component {
+class IssueItem extends Component {
     render() {
-        const { item, itemMapping } = this.props;
+        const { item } = this.props;
         return (
             <div className="row">
                 <div className="col-md-12">
-                    {item.title}
+                    {item.issue.title}
                 </div>
             </div>
         );
     }
 }
 
-export default Item;
+export default IssueItem;
