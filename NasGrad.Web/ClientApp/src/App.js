@@ -8,7 +8,7 @@ import IssueList from './components/IssueList';
 const App = () => (
     <Layout>
         <Route exact path='/' component={Home} />
-        <Route exact path='/issuedetail' component={IssueDetail} />
+        <Route exact path='/issuedetail/:id([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})' component={IssueDetail} />
         <Route exact path='/issues' component={IssueList} />
     </Layout>
 );
