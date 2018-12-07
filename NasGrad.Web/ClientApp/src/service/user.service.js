@@ -1,20 +1,17 @@
-﻿import { apiUrl, localStorageKeys, urlControlers } from "../constants";
-import { defaultHeaders, handleResponse } from "../helpers/fetch.helper";
+﻿import { apiUrl, storageKeys, urlControlers } from "../constants";
+import { handleResponse } from "../helpers/helper";
+import { headers } from "../helpers/http.helpers";
 
 export const login = (username, password) => {
     const requestOptions = {
         method: "POST",
-        headers: defaultHeaders(),
+        headers: headers(true),
         body: JSON.stringify({ username, password })
     };
-
-    // login API allow anonymous call
-    delete requestOptions.headers.Authorization;
 
     const url = apiUrl + `/${urlControlers.users}/login`;
     return fetch(url, requestOptions)
         .then(handleResponse)
-
         .catch(error => {
             if (error.message) {
                 return Promise.reject("Username or password is incorrect");
@@ -23,14 +20,8 @@ export const login = (username, password) => {
         });
 };
 
-export const saveLoginData = (user, username) => {
-    // store user details and jwt token in local storage to keep user logged in between page refreshes
-    localStorage.setItem(localStorageKeys.user, JSON.stringify(user));
-    localStorage.setItem(localStorageKeys.username, username);
-};
+export const saveLoginData = (user) =>
+    localStorage.setItem(storageKeys.user, JSON.stringify(user));
 
-export const logout = () => {
-    // remove user from local storage to logout user
-    localStorage.removeItem(localStorageKeys.user);
-    localStorage.removeItem(localStorageKeys.username);
-};
+export const logout = () =>
+    localStorage.removeItem(storageKeys.user);

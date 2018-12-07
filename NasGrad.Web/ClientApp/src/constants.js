@@ -1,22 +1,19 @@
-import { host } from "./runtimeConfig";
+import { apiHost } from "./apiConfig";
 
-let runtimeHost = host;
+export const apiUrl = `${apiHost}/api`;
 
-export const apiUrl = `${runtimeHost}/api`;
-export const dotnetifyUrl = `${runtimeHost}`;
 export const urlControlers = {
     users: "users"
 };
 
-export const defaultPageSize = 10;
+export const defaultPageSize = 50;
 
-export const localStorageKeys = {
-    user: "LS_USER"
+export const storageKeys = {
+    user: "SK_USER"
 };
 
 export const actionTypes = {
     User: {
-        // login thunk
         loginStarted: "USER_LOGIN_STARTED",
         loginSucceeded: "USER_LOGIN_SUCCEEDED",
         loginFailed: "USER_LOGIN_FAILED",

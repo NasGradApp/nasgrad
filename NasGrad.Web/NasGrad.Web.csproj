@@ -22,7 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ClientApp\src\helpers\" />
     <Folder Include="ClientApp\src\service\" />
   </ItemGroup>
 
