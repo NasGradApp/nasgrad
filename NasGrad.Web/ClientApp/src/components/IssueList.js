@@ -12,7 +12,7 @@ class IssueList extends Component {
     }
     render() {
         const { activePage, setActivePage } = this.props;
-        const { issues } = this.props.page;
+        const { issues } = this.props.data;
         const totalPages = Math.floor((issues.length + defaultPageSize - 1) / defaultPageSize);
         const items = issues.skip((activePage - 1) * defaultPageSize).take(defaultPageSize);
 

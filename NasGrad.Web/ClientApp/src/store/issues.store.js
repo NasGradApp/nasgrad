@@ -4,7 +4,7 @@ import * as issuesService from '../service/issues.service';
 const actionType = actionTypes.issues;
 
 export const actionCreators = {
-    getPage: (page, pageSize) => async (dispatch, getState) => {
+    getAllIssues: () => async (dispatch, getState) => {
         if (getState().issues.isLoading) {
             // Prevent duplicate requests to the API
             return;
@@ -12,12 +12,11 @@ export const actionCreators = {
 
         dispatch({ type: actionType.getPageStarted });
 
-        issuesService.getPage(page, pageSize).then(
+        issuesService.getAllIssues().then(
             data => {
                 dispatch({
                     type: actionType.getPageSucceeded,
-                    page: data,
-                    activePage: page
+                    data: data
                 });
             },
             error => {
@@ -42,7 +41,7 @@ export const actionCreators = {
 const initialState = {
     isLoading: false,
     error: null,
-    page: {
+    data: {
         "count": 2,
         "issues": [
             {
@@ -110,7 +109,7 @@ export const reducer = (state, action) => {
     if (action.type === actionType.getPageSucceeded) {
         return {
             ...state,
-            page: action.page,
+            data: action.data,
             error: null,
             isLoading: false
         };
@@ -119,7 +118,7 @@ export const reducer = (state, action) => {
     if (action.type === actionType.getPageFailed) {
         return {
             ...state,
-            page: null,
+            data: null,
             error: action.error,
             isLoading: false
         };
