@@ -23,17 +23,15 @@ namespace NasGrad.API.Controllers
         public ActionResult NewIssue([FromBody] JObject newIssue)
         {
             var issue = JsonConvert.DeserializeObject<NasGradIssue>(newIssue.GetValue("issue").ToString());
+            var pict = JsonConvert.DeserializeObject<NasGradPicture>(newIssue.GetValue("pictureInfo").ToString());
+            pict.Visible = false;
 
-            var pictureName = newIssue.GetValue("pictureInfo").Value<string>("name");
-            var pictureB64 = newIssue.GetValue("pictureInfo").Value<string>("rawData");
+            _dbStorage.InsertPicture(pict);
+            issue.Pictures = new List<string> { pict.Id };
+            issue.PicturePreview = pict.Content;
+            _dbStorage.InsertNewIssue(issue);
 
             return Ok("Issue added");
         }
     }
 }
-/*
-var dbCollection = _database.GetCollection<NasGradPicture>(Constants.PictureTableName);
-var pic = await dbCollection.Find(c => string.Equals(c.Id, id)).ToListAsync();
-pic[0].Visible = visible;
-                await dbCollection.InsertOneAsync(pic[0]);
-                return true;*/
