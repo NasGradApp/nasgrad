@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace NasGrad.DBEngine
@@ -21,18 +22,46 @@ namespace NasGrad.DBEngine
             return result;
         }
 
-        public async Task<List<NasGradIssueWrapper>> GetIssues()
+        public async Task<List<NasGradIssue>> GetIssues()
         {
-            var dbCollection = _database.GetCollection<NasGradIssueWrapper>(Constants.IssueWrapperTableName);
-            var result = await dbCollection.Find(FilterDefinition<NasGradIssueWrapper>.Empty).ToListAsync();
+            var dbCollection = _database.GetCollection<NasGradIssue>(Constants.IssueTableName);
+            var result = await dbCollection.Find(FilterDefinition<NasGradIssue>.Empty).ToListAsync();
 
             return result;
         }
 
-        public async Task<NasGradIssueWrapper> GetIssue(string issueId)
+        public async Task<NasGradIssue> GetIssue(string issueId)
         {
-            var dbCollection = _database.GetCollection<NasGradIssueWrapper>(Constants.IssueWrapperTableName);
+            var dbCollection = _database.GetCollection<NasGradIssue>(Constants.IssueTableName);
             var result = await dbCollection.Find(i => string.Equals(i.Id, issueId)).ToListAsync();
+            if (result.Count == 0 || result.Count > 1)
+            {
+                return null;
+            }
+
+            return result[0];
+        }
+
+        public async Task<List<NasGradCategory>> GetCategories()
+        {
+            var dbCollection = _database.GetCollection<NasGradCategory>(Constants.CategoryTableName);
+            var result = await dbCollection.Find(FilterDefinition<NasGradCategory>.Empty).ToListAsync();
+
+            return result;
+        }
+
+        public async Task<List<NasGradCategory>> GetSelectedCategories(string[] ids)
+        {
+            var dbCollection = _database.GetCollection<NasGradCategory>(Constants.CategoryTableName);
+            var result = await dbCollection.Find(c => ids.ToList().Contains(c.Id)).ToListAsync();
+
+            return result;
+        }
+
+        public async Task<NasGradCategory> GetCategory(string id)
+        {
+            var dbCollection = _database.GetCollection<NasGradCategory>(Constants.CategoryTableName);
+            var result = await dbCollection.Find(c => string.Equals(c.Id, id)).ToListAsync();
             if (result.Count == 0 || result.Count > 1)
             {
                 return null;

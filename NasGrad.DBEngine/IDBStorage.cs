@@ -6,7 +6,10 @@ namespace NasGrad.DBEngine
     public interface IDBStorage
     {
         Task<List<NasGradType>> GetConfiguration();
-        Task<List<NasGradIssueWrapper>> GetIssues();
-        Task<NasGradIssueWrapper> GetIssue(string issueId);
+        Task<List<NasGradIssue>> GetIssues();
+        Task<NasGradIssue> GetIssue(string issueId);
+        Task<List<NasGradCategory>> GetCategories();
+        Task<List<NasGradCategory>> GetSelectedCategories(string[] ids);
+        Task<NasGradCategory> GetCategory(string id);
     }
 }
