@@ -4,11 +4,12 @@ import './index.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
+import { ConnectedRouter, push } from 'react-router-redux';
 import { createBrowserHistory } from 'history';
 import configureStore from './store/configureStore';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
+import { actionCreators as userActionCreators } from "./store/user.store";
 
 // Create browser history to use in the Redux store
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
@@ -29,3 +30,9 @@ ReactDOM.render(
     rootElement);
 
 registerServiceWorker();
+
+// need to be global function because of circular referencing
+window.handleHttp401 = function () {
+    userActionCreators.unauthorized()(store.dispatch);
+    store.dispatch(push("/login"));
+};
