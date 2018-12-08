@@ -33,6 +33,29 @@ export const actionCreators = {
             activePage: page
         });
     },
+    getIssue: (id) => async (dispatch, getState) => {
+        if (getState().issues.isLoading) {
+            // Prevent duplicate requests to the API
+            return;
+        }
+
+        dispatch({ type: actionType.getIssueStarted });
+
+        issuesService.getIssue(id).then(
+            data => {
+                dispatch({
+                    type: actionType.getIssueSucceeded,
+                    data: data
+                });
+            },
+            error => {
+                dispatch({
+                    type: actionType.getIssueFailed,
+                    error: error
+                });
+            }
+        );
+    },
     setActiveViewType: (type) => async (dispatch, getState) => {
         dispatch({
             type: actionType.setActiveViewType,
@@ -41,10 +64,13 @@ export const actionCreators = {
     }
 };
 
+
+
 // initial store state
 const initialState = {
     isLoading: false,
     error: null,
+    data: null,
     issues: null,
     activePage: 1,
     activeViewType: viewType.list
@@ -85,7 +111,31 @@ export const reducer = (state, action) => {
             activePage: action.activePage
         };
     }
+    
+    if (action.type === actionType.getIssueStarted) {
+        return {
+            ...state,
+            error: null,
+            isLoading: true
+        };
+    }
 
+    if (action.type === actionType.getIssueSucceeded) {
+        return {
+            ...state,
+            issue: action.data,
+            isLoading: false
+        };
+    }
+
+    if (action.type === actionType.getIssueFailed) {
+        return {
+            ...state,
+            issue: null,
+            error: action.error,
+            isLoading: false
+        };
+    }
     if (action.type === actionType.setActiveViewType) {
         return {
             ...state,

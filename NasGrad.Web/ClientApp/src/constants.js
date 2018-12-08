@@ -36,6 +36,28 @@ export const actionTypes = {
         getPageSucceeded: "ISSUES_GET_PAGE_SUCCEEDED",
         getPageFailed: "ISSUES_GET_PAGE_FAILED",
         setActivePage: "ISSUES_SET_ACTIVE_PAGE",
-        setActiveViewType: "ISSUE_SET_ACTIVE_VIEW_TYPE"
+        setActiveViewType: "ISSUE_SET_ACTIVE_VIEW_TYPE",
+		getIssueSucceeded: "ISSUE_GET_SUCCEEDED",
+        getIssueFailed: "ISSUE_GET_FAILED",
+        getIssueStarted: "ISSUE_GET_STARTED"
+    },
+    category: {
+        getPageSucceededCategory: "CATEGORY_GET_PAGE_SUCCEEDED",
+        getPageFailedCategory: "CATEGORY_GET_PAGE_FAILED",
+        getPageStartedCategory: "CATEGORY_GET_PAGE_STARTED",
+        setActivePageCategory: "CATEGORY_SET_ACTIVE_PAGE"
+    },
+    types: {
+        getPageStartedTypes: "TYPES_GET_PAGE_STARTED",
+        getPageSucceededTypes: "TYPES_GET_PAGE_SUCCEEDED",
+        getPageFailedTypes: "TYPES_GET_PAGE_FAILED"
+    },
+    picture: {
+        getPageStartedPicture: "PICTURE_GET_PAGE_STARTED",
+        getPageSucceededPicture: "PICTURE_GET_PAGE_SUCCEEDED",
+        getPageFailedCPicture: "PICTURE_GET_PAGE_FAILED",
+        updatePictureStarted: "PICTURE_UPDATE_STARTED",
+        updatePictureSucceded: "PICTURE_PDATE_SUCCEDED",
+        updatePictureFailed: "PICTURE_UPDATE_FAILED"
     }
 };
