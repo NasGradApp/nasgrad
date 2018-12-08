@@ -30,6 +30,9 @@ export const actionTypes = {
         getPageStarted: "ISSUES_GET_PAGE_STARTED",
         getPageSucceeded: "ISSUES_GET_PAGE_SUCCEEDED",
         getPageFailed: "ISSUES_GET_PAGE_FAILED",
-        setActivePage: "ISSUES_SET_ACTIVE_PAGE"
+        setActivePage: "ISSUES_SET_ACTIVE_PAGE",
+        getIssueSucceeded: "ISSUE_GET_SUCCEEDED",
+        getIssueFailed: "ISSUE_GET_FAILED",
+        getIssueStarted: "ISSUE_GET_STARTED"
     }
 };

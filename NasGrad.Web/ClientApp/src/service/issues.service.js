@@ -17,4 +17,21 @@ export const getAllIssues = () => {
             }
             return Promise.reject(error);
         });
-};
+}
+
+export const getIssue = (id) => {
+    const requestOptions = {
+        method: "GET",
+        headers: headers(true)
+    };
+
+    const url = apiUrl + '/GetIssueList/GetIssueDetails/' + id;
+    return fetch(url, requestOptions)
+        .then(handleResponse)
+        .catch(error => {
+            if (error.message) {
+                return Promise.reject("Unable to find issue");
+            }
+            return Promise.reject(error);
+        });
+}

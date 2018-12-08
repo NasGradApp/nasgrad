@@ -20,24 +20,27 @@ class IssueDetail extends Component {
     constructor(props) {
         super(props);
     }
-    updatedIssueObject
 
     mapRef = createRef()
 
+    componentWillMount() {
+        const { id } = this.props.match.params;
+        this.props.getIssue(id);
+    }
+    
     updateIssue(e) {
-        this.updatedIssueObject.pictures.visible === true;
-        this.props.updateIssue(this.updateIssue.id, this.updatedIssueObject);
+        // this.updatedIssueObject.pictures.visible === true;
+        // this.props.updateIssue(this.updateIssue.id, this.updatedIssueObject);
     }
 
     render() {
-        const { id } = this.props.match.params;
 
-        var listOfIssues = this.props.data.issues.filter(function (issue) {
-            console.log(issue.issue.id);
-            return issue.issue.id === id;
-        });
+        const issueObject = this.props.issue;
 
-        var issueObject = listOfIssues[0];
+        if (issueObject === null || issueObject === undefined) {
+            return "";
+        }
+
         var showForm = true;
         var error = false;
 
@@ -46,12 +49,10 @@ class IssueDetail extends Component {
             showForm = false;
         }
 
-        this.updatedIssueObject = issueObject.issue;
-
-        const dLat = issueObject.issue.location.langitude;
-        const dLng = issueObject.issue.location.longitude;
-        const picture = issueObject.issue.pictures.content;
-        const isPictureVisible = issueObject.issue.pictures.visible;
+        const dLat = issueObject.location.langitude;
+        const dLng = issueObject.location.longitude;
+        const picture = issueObject.pictures.content;
+        const isPictureVisible = true;//issueObject.pictures.visible;
 
         const hasLocation = (dLat && dLng);
         const locationPin = hasLocation ? L.latLng(dLat, dLng) : null;
@@ -64,17 +65,14 @@ class IssueDetail extends Component {
             <Button
                 bsStyle="info"
                 href="#" type="submit"
-                onClick={this.updateIssue(this)}
-                disabled
             >Approve
                                             </Button>
         ) : (<Button
             bsStyle="info"
-                href="#" type="submit"
-                onClick={this.updateIssue(this)}
+            href="#" type="submit"
         >Approve
                                             </Button>);
-        
+
 
         const clickOnHide = (
             isPictureVisible === false
@@ -85,14 +83,12 @@ class IssueDetail extends Component {
                 bsStyle="info"
                 href="#"
                 type="submit"
-                onClick={clickOnHide}
             >Hide
              </Button>
         ) : (<Button
             bsStyle="info"
             href="#"
             type="submit"
-            onClick={clickOnHide}
             disabled
         >Hide
             </Button>);
@@ -101,12 +97,12 @@ class IssueDetail extends Component {
             <form>
                 <div className="form-group">
                     <label>Naslov</label>
-                    <input type="text" className="form-control" placeholder="Problem" readOnly="true" defaultValue={issueObject.issue.title} />
+                    <input type="text" className="form-control" placeholder="Problem" readOnly="true" defaultValue={issueObject.title} />
                 </div>
                 <div className="form-group">
                     <label>Kategorija:</label>
                     <ul>
-                        {issueObject.issue.categories.map((item, rowIndex) =>
+                        {issueObject.categories.map((item, rowIndex) =>
                             (<li key={item}>
                                 {item}
                             </li>)
@@ -115,15 +111,15 @@ class IssueDetail extends Component {
                 </div>
                 <div className="form-group">
                     <label>Tip problema:</label>
-                    <input type="text" className="form-control" placeholder="Problem" readOnly="true" defaultValue={issueObject.issue["issue-type"]} />
+                    <input type="text" className="form-control" placeholder="Problem" readOnly="true" defaultValue={issueObject["issue-type"]} />
                 </div>
                 <div className="form-group">
                     <label>Opis problema:</label>
-                    <textarea className="form-control" placeholder="Detalji problema" readOnly="true" defaultValue={issueObject.issue.description} />
+                    <textarea className="form-control" placeholder="Detalji problema" readOnly="true" defaultValue={issueObject.description} />
                 </div>
                 <div className="form-group">
                     <label>Status:</label>
-                    <input type="text" className="form-control" placeholder="Problem" readOnly="true" defaultValue={issueObject.issue.state} />
+                    <input type="text" className="form-control" placeholder="Problem" readOnly="true" defaultValue={issueObject.state} />
                 </div>
 
                 {hasLocation ?
@@ -155,6 +151,7 @@ class IssueDetail extends Component {
                             <div className="panel-title">Problem:</div>
                         </div>
                         <div className="panel-body">
+                            {this.props.isLoading ? <p>Loading...</p> : null}
                             {(error) ? errorHappened : ""}
                             {(showForm) ? form : ""}
                         </div>
@@ -180,8 +177,13 @@ class IssueDetail extends Component {
                 </div>
             </div>
         );
+
     }
+
+    
 }
+
+
 
 export default connect(
     state => state.issues,
