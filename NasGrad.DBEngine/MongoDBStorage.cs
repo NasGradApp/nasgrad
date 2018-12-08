@@ -107,5 +107,49 @@ namespace NasGrad.DBEngine
                 throw new MongoDBStorageException($"Error while adding new item in Pictures collection.", e);
             }
         }
+
+        public async Task InsertPicture(NasGradPicture pic)
+        {
+            try
+            {
+                var dbCollection = _database.GetCollection<NasGradPicture>(Constants.PictureTableName);
+                await dbCollection.InsertOneAsync(pic);
+            }
+            catch (System.Exception e)
+            {
+                throw new MongoDBStorageException($"Error while adding new item in Pictures collection.", e);
+            }
+        }
+
+        public async Task InsertNewIssue(NasGradIssue issue)
+        {
+            try
+            {
+                var dbCollection = _database.GetCollection<NasGradIssue>(Constants.IssueTableName);
+                await dbCollection.InsertOneAsync(issue);
+            }
+            catch (System.Exception e)
+            {
+                throw new MongoDBStorageException($"Error while adding new item in Issue collection.", e);
+            }
+        }
+
+        public async Task<bool> UpdateIssueStatus(string id, int statusId)
+        {
+            try
+            {
+                var updateIssueStatus = Builders<NasGradIssue>.Update.Set(c => c.State, (StateEnum)statusId);
+                var dbCollection = _database.GetCollection<NasGradIssue>(Constants.IssueTableName);
+                await dbCollection.UpdateOneAsync(
+                    Builders<NasGradIssue>.Filter.Eq(d => d.Id, id),
+                    updateIssueStatus
+                );
+                return true;
+            }
+            catch (System.Exception e)
+            {
+                throw new MongoDBStorageException($"Error while adding new item in Pictures collection.", e);
+            }
+        }
     }
 }

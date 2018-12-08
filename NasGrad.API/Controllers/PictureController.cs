@@ -31,7 +31,7 @@ namespace NasGrad.API.Controllers
             return Ok(result);
         }
 
-        [HttpPost]
+        [HttpPut]
         public async Task<IActionResult> SetVisibility(string id, bool visible)
         {
             var result = await _dbStorage.SetVisibility(id, visible);

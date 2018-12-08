@@ -7,7 +7,7 @@ export const getAllIssues = () => {
         method: "GET",
         headers: headers(true)
     };
-
+          
     const url = apiUrl + '/getissuelist';
     return fetch(url, requestOptions)
         .then(handleResponse)

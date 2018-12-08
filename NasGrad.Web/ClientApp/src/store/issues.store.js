@@ -1,4 +1,4 @@
-﻿import { actionTypes } from '../constants';
+﻿import { actionTypes, viewType } from '../constants';
 import * as issuesService from '../service/issues.service';
 
 const actionType = actionTypes.issues;
@@ -16,7 +16,7 @@ export const actionCreators = {
             data => {
                 dispatch({
                     type: actionType.getPageSucceeded,
-                    data: data
+                    issues: data
                 });
             },
             error => {
@@ -56,8 +56,12 @@ export const actionCreators = {
             }
         );
     },
-
-    
+    setActiveViewType: (type) => async (dispatch, getState) => {
+        dispatch({
+            type: actionType.setActiveViewType,
+            activeViewType: type
+        });
+    }
 };
 
 
@@ -67,7 +71,9 @@ const initialState = {
     isLoading: false,
     error: null,
     data: null,
-    activePage: 1
+    issues: null,
+    activePage: 1,
+    activeViewType: viewType.list
 };
 
 export const reducer = (state, action) => {
@@ -84,7 +90,7 @@ export const reducer = (state, action) => {
     if (action.type === actionType.getPageSucceeded) {
         return {
             ...state,
-            data: action.data,
+            issues: action.issues,
             error: null,
             isLoading: false
         };
@@ -93,7 +99,7 @@ export const reducer = (state, action) => {
     if (action.type === actionType.getPageFailed) {
         return {
             ...state,
-            data: null,
+            issues: null,
             error: action.error,
             isLoading: false
         };
@@ -130,5 +136,12 @@ export const reducer = (state, action) => {
             isLoading: false
         };
     }
+    if (action.type === actionType.setActiveViewType) {
+        return {
+            ...state,
+            activeViewType: action.activeViewType
+        };
+    }
+
     return state;
 };
