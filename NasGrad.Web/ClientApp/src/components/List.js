@@ -10,7 +10,7 @@ class List extends Component {
 
         const selectPage = (page) => {
             setActivePage(page);
-        }
+        };
 
         return (
 
@@ -19,7 +19,7 @@ class List extends Component {
                     {items.map(item => {
                         const data = {
                             item,
-                            key: item.issue.id
+                            key: item.id
                         };
 
                         return React.createElement(itemComponent, data);
