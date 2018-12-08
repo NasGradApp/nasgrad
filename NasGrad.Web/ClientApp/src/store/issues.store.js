@@ -47,7 +47,7 @@ const initialState = {
     error: null,
     issues: null,
     activePage: 1,
-    activeViewType: viewType.map
+    activeViewType: viewType.list
 };
 
 export const reducer = (state, action) => {

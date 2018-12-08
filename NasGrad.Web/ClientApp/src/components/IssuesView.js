@@ -24,28 +24,26 @@ class IssuesView extends Component {
         );
 
         let view = "";
-        let classNameList = "";
-        let classNameMap = "";
+        let classNameList = "btn btn-warning";
+        let classNameMap = "btn btn-warning";
         if (activeViewType === viewType.list) {
             view = (<List empty={empty} items={items} itemComponent={IssueItem} totalPages={totalPages} activePage={activePage} setActivePage={setActivePage} />);
-            classNameList = "active";
+            classNameList += " disabled";
         } else if (activeViewType === viewType.map) {
             view = (<Map items={items} />);
-            classNameMap = "active";
+            classNameMap += " disabled";
         }
 
         return (
             <div>
                 <h1>Problemi</h1>
+                <div className="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups" style={{ float: "right", marginTop: "-50px" }}>
+                    <div className="btn-group mr-2" role="group" aria-label="First group">
+                        <button type="button" className={classNameList} onClick={() => setActiveViewType(viewType.list)}>List</button>
+                        <button type="button" className={classNameMap} onClick={() => setActiveViewType(viewType.map)}>Mapa</button>
+                    </div>
+                </div>
                 <div>
-                    <ul className="nav nav-tabs">
-                        <li role="presentation" className={classNameList}>
-                            <a onClick={() => setActiveViewType(viewType.list)}>Lista</a>
-                        </li>
-                        <li role="presentation" className={classNameMap}>
-                            <a onClick={() => setActiveViewType(viewType.map)}>Mapa</a>
-                        </li>
-                    </ul>
                     {view}
                 </div>
             </div>
