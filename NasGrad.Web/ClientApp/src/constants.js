@@ -40,5 +40,11 @@ export const actionTypes = {
         getPageFailedCategory: "CATEGORY_GET_PAGE_FAILED",
         getPageStartedCategory: "CATEGORY_GET_PAGE_STARTED",
         setActivePageCategory: "CATEGORY_SET_ACTIVE_PAGE"
+    },
+    types: {
+        getPageStartedTypes: "TYPES_GET_PAGE_STARTED",
+        getPageSucceededTypes: "TYPES_GET_PAGE_SUCCEEDED",
+        getPageFailedTypes: "TYPES_GET_PAGE_FAILED"
     }
+
 };

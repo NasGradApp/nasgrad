@@ -5,6 +5,7 @@ import { Map, Marker, Popup, TileLayer } from 'react-leaflet';
 import { bindActionCreators } from "redux";
 import { actionCreators as issuesActionCreators } from '../store/issues.store';
 import { actionCreators as categoryActionCreators } from '../store/category.store';
+import { actionCreators as typeActionCreators } from '../store/type.store';
 import { Button, ButtonGroup, FormControl, Well, Label, Panel, FormGroup, HelpBlock, Popover, OverlayTrigger } from "react-bootstrap";
 
 import L from "leaflet";
@@ -23,13 +24,14 @@ class IssueDetail extends Component {
     }
 
     mapRef = createRef()
-    
+
     componentWillMount() {
         const { id } = this.props.match.params;
         this.props.issuesActionCreators.getIssue(id);
         this.props.categoryActionCreators.getAllCategories();
+        this.props.typeActionCreators.getAllCategories();
     }
-    
+
     updateIssue(e) {
         // this.updatedIssueObject.pictures.visible === true;
         // this.props.updateIssue(this.updateIssue.id, this.updatedIssueObject);
@@ -37,7 +39,7 @@ class IssueDetail extends Component {
 
     getCategoryName(id) {
         var allCategories = this.props.category.data;
-        for (var i = 0; i < allCategories.length ; ++i) {
+        for (var i = 0; i < allCategories.length; ++i) {
             if (allCategories[i].id === id.item) {
                 return allCategories[i].name;
             }
@@ -45,12 +47,38 @@ class IssueDetail extends Component {
         return null;
     }
 
+    getProblemType(id) {
+        var allTypes = this.props.types.data;
+        for (var i = 0; i < allTypes.length; ++i) {
+            if (allTypes[i].id === id) {
+                return allTypes[i].name;
+            }
+        }
+        return null;
+    }
+    
+    getStatusIssue(id) {
+        const statusIssue = {
+            "1": 'Submitted',
+            "2": 'Reported',
+            "3": 'Done'
+        };
+
+        for (let [key, value] of Object.entries(statusIssue)) {
+            if (key === id.toString()) {
+                return value;
+            }
+        }
+        return null;
+    };
+
     render() {
 
         const issueObject = this.props.issues.issue;
         const allCategories = this.props.category.data;
+        const allTypes = this.props.types.data;
 
-        if ((issueObject === null || issueObject === undefined) || (allCategories === null || allCategories === undefined)) {
+        if ((issueObject === null || issueObject === undefined) || (allCategories === null || allCategories === undefined) || (allTypes === null || allTypes === undefined)) {
             return "";
         }
 
@@ -73,6 +101,7 @@ class IssueDetail extends Component {
         const errorHappened = (
             <div className="alert alert-danger col-sm-12">Nothing for update</div>
         );
+
 
 
         const approveButton = (isPictureVisible) ? (
@@ -111,12 +140,12 @@ class IssueDetail extends Component {
             <form>
                 <div className="form-group">
                     <label>Naslov</label>
-                    <input type="text" className="form-control" placeholder="Problem" readOnly="true" defaultValue={issueObject.title} />
+                    <input type="text" className="form-control" placeholder="Naslov" readOnly="true" defaultValue={issueObject.title} />
                 </div>
                 <div className="form-group">
                     <label>Kategorija:</label>
                     <ul>
-                        {issueObject.categories.map((item, rowIndex) => 
+                        {issueObject.categories.map((item, rowIndex) =>
                             (<li key={item}>
                                 {this.getCategoryName({ item })}
                             </li>)
@@ -125,7 +154,7 @@ class IssueDetail extends Component {
                 </div>
                 <div className="form-group">
                     <label>Tip problema:</label>
-                    <input type="text" className="form-control" placeholder="Problem" readOnly="true" defaultValue={issueObject["issue-type"]} />
+                    <input type="text" className="form-control" placeholder="Tip problema" readOnly="true" defaultValue={this.getProblemType(issueObject.issueType)} />
                 </div>
                 <div className="form-group">
                     <label>Opis problema:</label>
@@ -133,7 +162,7 @@ class IssueDetail extends Component {
                 </div>
                 <div className="form-group">
                     <label>Status:</label>
-                    <input type="text" className="form-control" placeholder="Problem" readOnly="true" defaultValue={issueObject.state} />
+                    <input type="text" className="form-control" placeholder="Status" readOnly="true" defaultValue={this.getStatusIssue(issueObject.state)} />
                 </div>
 
                 {hasLocation ?
@@ -165,7 +194,7 @@ class IssueDetail extends Component {
                             <div className="panel-title">Problem:</div>
                         </div>
                         <div className="panel-body">
-                            {(this.props.issues.isLoading || this.props.category.isLoading)  ? <p>Loading...</p> : null}
+                            {(this.props.issues.isLoading || this.props.category.isLoading || this.props.types.isLoading) ? <p>Loading...</p> : null}
                             {(error) ? errorHappened : ""}
                             {(showForm) ? form : ""}
                         </div>
@@ -194,20 +223,22 @@ class IssueDetail extends Component {
 
     }
 
-    
+
 }
 
 export default connect(
-    state => { 
+    state => {
         return {
             issues: state.issues,
-            category: state.category
+            category: state.category,
+            types: state.types
         };
     },
     dispatch => {
         return {
             issuesActionCreators: bindActionCreators(issuesActionCreators, dispatch),
-            categoryActionCreators: bindActionCreators(categoryActionCreators, dispatch)
+            categoryActionCreators: bindActionCreators(categoryActionCreators, dispatch),
+            typeActionCreators: bindActionCreators(typeActionCreators, dispatch)
         };
     }
 )(IssueDetail);

@@ -4,12 +4,14 @@ import { routerReducer, routerMiddleware } from 'react-router-redux';
 import * as usersStore from './users.store';
 import * as issuesStore from './issues.store';
 import * as categoryStore from './category.store';
+import * as typesStore from './type.store';
 
 export default function configureStore(history, initialState) {
     const reducers = {
         users: usersStore.reducer,
         issues: issuesStore.reducer,
-        category: categoryStore.reducer
+        category: categoryStore.reducer,
+        types: typesStore.reducer
     };
 
     const middleware = [
