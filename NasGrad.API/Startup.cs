@@ -72,6 +72,7 @@ namespace NasGrad.API
                 app.UseHsts();
             }
 
+            app.UseCors("CorsPolicy");
             app.UseHttpsRedirection();
             app.UseMvc();
 

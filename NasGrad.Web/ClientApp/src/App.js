@@ -2,12 +2,12 @@
 import { Route } from 'react-router';
 import Layout from './components/Layout';
 import Home from './components/Home';
-import IssueList from './components/IssueList';
+import IssuesView from './components/IssuesView';
 
 const App = () => (
     <Layout>
         <Route exact path='/' component={Home} />
-        <Route exact path='/issues' component={IssueList} />
+        <Route exact path='/issues' component={IssuesView} />
     </Layout>
 );
 

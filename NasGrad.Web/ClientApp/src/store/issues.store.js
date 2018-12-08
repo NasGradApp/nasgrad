@@ -1,4 +1,4 @@
-﻿import { actionTypes } from '../constants';
+﻿import { actionTypes, viewType } from '../constants';
 import * as issuesService from '../service/issues.service';
 
 const actionType = actionTypes.issues;
@@ -16,7 +16,7 @@ export const actionCreators = {
             data => {
                 dispatch({
                     type: actionType.getPageSucceeded,
-                    data: data
+                    issues: data
                 });
             },
             error => {
@@ -33,66 +33,21 @@ export const actionCreators = {
             activePage: page
         });
     },
-
-    getItem: () => { }
+    setActiveViewType: (type) => async (dispatch, getState) => {
+        dispatch({
+            type: actionType.setActiveViewType,
+            activeViewType: type
+        });
+    }
 };
 
 // initial store state
 const initialState = {
     isLoading: false,
     error: null,
-    data: {
-        "count": 2,
-        "issues": [
-            {
-                "issue": {
-                    "id": "95410c0d-5d14-4407-b2b2-2bc1891014e5",
-                    "owner-id": "4abd7bff-8f4f-4fe3-8f01-40e742eff59a",
-                    "title": "Rupa u putu na Trifkovic Trgu",
-                    "description": "to je to nemam sta drugo da dodam",
-                    "issue-type": "Rupa u putu",
-                    "state": "submited",
-                    "pictures": [
-                        "pic-1",
-                        "pic-2"
-                    ],
-                    "categories": [
-                        "JKP Put",
-                        "JKP Zelenilo"
-                    ],
-                    "location": {
-                        "langitude": 45.25695,
-                        "longitude": 19.844151
-                    }
-                },
-                "picture-preview": "AAEC"
-            },
-            {
-                "issue": {
-                    "id": "4eec31f1-3424-47e2-8fa1-f61a94453677",
-                    "owner-id": "781071cd-16c2-4bb5-a978-5086b8a822d7",
-                    "title": "Rupa koja nije na Trifkovic Trgu",
-                    "description": "to je to nemam sta drugo da dodam",
-                    "issue-type": "Rupa u putu",
-                    "state": "submited",
-                    "pictures": [
-                        "pic-3",
-                        "pic-4"
-                    ],
-                    "categories": [
-                        "JKP Put",
-                        "JKP Zelenilo"
-                    ],
-                    "location": {
-                        "langitude": 46.25695,
-                        "longitude": 20.844151
-                    }
-                },
-                "picture-preview": "AAEC"
-            }
-        ]
-    },
-    activePage: 1
+    issues: null,
+    activePage: 1,
+    activeViewType: viewType.map
 };
 
 export const reducer = (state, action) => {
@@ -109,7 +64,7 @@ export const reducer = (state, action) => {
     if (action.type === actionType.getPageSucceeded) {
         return {
             ...state,
-            data: action.data,
+            issues: action.issues,
             error: null,
             isLoading: false
         };
@@ -118,7 +73,7 @@ export const reducer = (state, action) => {
     if (action.type === actionType.getPageFailed) {
         return {
             ...state,
-            data: null,
+            issues: null,
             error: action.error,
             isLoading: false
         };
@@ -128,6 +83,13 @@ export const reducer = (state, action) => {
         return {
             ...state,
             activePage: action.activePage
+        };
+    }
+
+    if (action.type === actionType.setActiveViewType) {
+        return {
+            ...state,
+            activeViewType: action.activeViewType
         };
     }
 

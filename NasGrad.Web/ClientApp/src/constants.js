@@ -17,6 +17,11 @@ export const apiControllerName = {
     issues: "issues"
 };
 
+export const viewType = {
+    list: "LIST",
+    map: "MAP"
+}
+
 export const actionTypes = {
     users: {
         loginStarted: "USER_LOGIN_STARTED",
@@ -30,6 +35,7 @@ export const actionTypes = {
         getPageStarted: "ISSUES_GET_PAGE_STARTED",
         getPageSucceeded: "ISSUES_GET_PAGE_SUCCEEDED",
         getPageFailed: "ISSUES_GET_PAGE_FAILED",
-        setActivePage: "ISSUES_SET_ACTIVE_PAGE"
+        setActivePage: "ISSUES_SET_ACTIVE_PAGE",
+        setActiveViewType: "ISSUE_SET_ACTIVE_VIEW_TYPE"
     }
 };
