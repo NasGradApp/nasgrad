@@ -1,7 +1,16 @@
 version: '3.4'
 
 services:
+  mongo:
+    image: mongo
+    ports: 
+     - "27017:27017"
+    volumes:
+      - 'mongo:/data/db'
+
   nasgrad.api:
+    depends_on:
+      - 'mongo'
     build:
       context: .
       dockerfile: NasGrad.API/Dockerfile
@@ -11,16 +20,9 @@ services:
       nasgradapi
     ports:
      - "8080:80"
-    networks:
-     - nasgrad-network
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/app_development
 
-  mongo:
-    image: mongo
-    ports: 
-     - "27017:27017"
-    networks:
-     - nasgrad-network
   
-networks:
-  nasgrad-network:
-    driver: bridge
+volumes:
+  mongo:
