@@ -92,7 +92,9 @@ class IssueDetail extends Component {
 
         const dLat = issueObject.location.langitude;
         const dLng = issueObject.location.longitude;
-        const picture = issueObject.pictures.content;
+        const picture = issueObject.picturePreview;
+        const imgSrc = `data:image/jpeg;base64,${picture}`;
+        
         const isPictureVisible = true;
 
         const hasLocation = (dLat && dLng);
@@ -206,7 +208,7 @@ class IssueDetail extends Component {
                             <div className="panel-title">Slike:</div>
                         </div>
                         <div >
-                            <img src={picture} className="pictureSettup" />
+                            <img src={imgSrc} className="pictureSettup" />
                         </div>
                         <div className="topMargin">
                             <ButtonGroup justified >
