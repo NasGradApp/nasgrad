@@ -11,5 +11,11 @@ namespace NasGrad.DBEngine
         Task<List<NasGradCategory>> GetCategories();
         Task<List<NasGradCategory>> GetSelectedCategories(string[] ids);
         Task<NasGradCategory> GetCategory(string id);
+        Task<List<NasGradPicture>> GetPictures();
+        Task<NasGradPicture> GetPicture(string id);
+        Task<bool> SetVisibility(string id, bool visible);
+
+        Task InsertPicture(NasGradPicture pic);
+        Task InsertNewIssue(NasGradIssue issue);
     }
 }

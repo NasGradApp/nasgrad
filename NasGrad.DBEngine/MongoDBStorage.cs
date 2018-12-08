@@ -69,5 +69,69 @@ namespace NasGrad.DBEngine
 
             return result[0];
         }
+
+        public async Task<List<NasGradPicture>> GetPictures()
+        {
+            var dbCollection = _database.GetCollection<NasGradPicture>(Constants.PictureTableName);
+            var result = await dbCollection.Find(FilterDefinition<NasGradPicture>.Empty).ToListAsync();
+
+            return result;
+        }
+
+        public async Task<NasGradPicture> GetPicture(string id)
+        {
+            var dbCollection = _database.GetCollection<NasGradPicture>(Constants.PictureTableName);
+            var result = await dbCollection.Find(c => string.Equals(c.Id, id)).ToListAsync();
+            if (result.Count == 0 || result.Count > 1)
+            {
+                return null;
+            }
+
+            return result[0];
+        }
+
+        public async Task<bool> SetVisibility(string id, bool visible)
+        {
+            try
+            {
+                var updatePictureVisibility = Builders<NasGradPicture>.Update.Set(c => c.Visible, visible);
+                var dbCollection = _database.GetCollection<NasGradPicture>(Constants.PictureTableName);
+                await dbCollection.UpdateOneAsync(
+                    Builders<NasGradPicture>.Filter.Eq(d => d.Id, id),
+                    updatePictureVisibility
+                    );
+                return true;
+            }
+            catch (System.Exception e)
+            {
+                throw new MongoDBStorageException($"Error while adding new item in Pictures collection.", e);
+            }
+        }
+
+        public async Task InsertPicture(NasGradPicture pic)
+        {
+            try
+            {
+                var dbCollection = _database.GetCollection<NasGradPicture>(Constants.PictureTableName);
+                await dbCollection.InsertOneAsync(pic);
+            }
+            catch (System.Exception e)
+            {
+                throw new MongoDBStorageException($"Error while adding new item in Pictures collection.", e);
+            }
+        }
+
+        public async Task InsertNewIssue(NasGradIssue issue)
+        {
+            try
+            {
+                var dbCollection = _database.GetCollection<NasGradIssue>(Constants.IssueTableName);
+                await dbCollection.InsertOneAsync(issue);
+            }
+            catch (System.Exception e)
+            {
+                throw new MongoDBStorageException($"Error while adding new item in Issue collection.", e);
+            }
+        }
     }
 }
