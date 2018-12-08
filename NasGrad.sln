@@ -5,11 +5,13 @@ VisualStudioVersion = 15.0.28307.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NasGrad.API", "NasGrad.API\NasGrad.API.csproj", "{15F89B5E-6B52-4F66-8D25-D6A8240BAA62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NasGrad.Web", "NasGrad.Web\NasGrad.Web.csproj", "{ECDFF1D7-2D7B-41E8-8FDC-249AB5530BDC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NasGrad.Web", "NasGrad.Web\NasGrad.Web.csproj", "{ECDFF1D7-2D7B-41E8-8FDC-249AB5530BDC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NasGrad.DBEngine", "NasGrad.DBEngine\NasGrad.DBEngine.csproj", "{B6ED31F1-61DD-4E92-B919-B4FC176DF618}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NasGrad.DBEngine", "NasGrad.DBEngine\NasGrad.DBEngine.csproj", "{B6ED31F1-61DD-4E92-B919-B4FC176DF618}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbInitializer", "DbInitializer\DbInitializer.csproj", "{DA2D67A4-6DE0-4256-9634-A92A4E8547B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DbInitializer", "DbInitializer\DbInitializer.csproj", "{DA2D67A4-6DE0-4256-9634-A92A4E8547B1}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{FCE8AEC5-548C-4910-B77D-AE10E94751FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{DA2D67A4-6DE0-4256-9634-A92A4E8547B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA2D67A4-6DE0-4256-9634-A92A4E8547B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA2D67A4-6DE0-4256-9634-A92A4E8547B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FCE8AEC5-548C-4910-B77D-AE10E94751FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FCE8AEC5-548C-4910-B77D-AE10E94751FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FCE8AEC5-548C-4910-B77D-AE10E94751FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FCE8AEC5-548C-4910-B77D-AE10E94751FC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
