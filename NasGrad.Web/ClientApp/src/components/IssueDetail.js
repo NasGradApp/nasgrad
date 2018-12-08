@@ -77,11 +77,10 @@ class IssueDetail extends Component {
     };
 
     getPicture(id) {
-        const imgSrc = `data:image/jpeg;base64,`;
         var allPictures = this.props.picture.data;
         for (var i = 0; i < allPictures.length; ++i) {
-            if (allPictures[i].id === id.item) {
-                return imgSrc + allPictures[i].content;
+            if (allPictures[i].id === id.item && allPictures[i].content !== "") {
+                return 'data:image/jpeg;base64,' + allPictures[i].content;
             }
         }
         return null;
@@ -127,7 +126,7 @@ class IssueDetail extends Component {
         const form = (
             <form>
                 <div className="form-group">
-                    <label>Naslov</label>
+                    <label>Naslov:</label>
                     <input type="text" className="form-control" placeholder="Naslov" readOnly="true" defaultValue={issueObject.title} />
                 </div>
                 <div className="form-group">
@@ -179,7 +178,7 @@ class IssueDetail extends Component {
                 <div className="column">
                     <div className="panel panel-info">
                         <div className="panel-heading">
-                            <div className="panel-title">Opis problema:</div>
+                            <h1>Detalji problema</h1>
                         </div>
                         <div className="panel-body">
                             {(this.props.issues.isLoading || this.props.category.isLoading || this.props.types.isLoading || this.props.picture.isLoading) ? <p>Loading...</p> : null}
@@ -191,10 +190,16 @@ class IssueDetail extends Component {
                 <div className="column">
                     <div className="panel panel-info">
                         <div className="panel-heading">
-                            <div className="panel-title">Slike:</div>
+                            <h1>Slike</h1>
                         </div>
                         <div >
                             {issueObject.pictures.map((item, rowIndex) => {
+                                const imgSrc = this.getPicture({ item });
+                                const img = (<img src={imgSrc} className="pictureSettup" />);
+                                if (imgSrc === null) {
+                                    return (<div></div>);
+                                }
+
                                 return (
                                     <div>
                                         <img src={this.getPicture({ item })} className="pictureSettup" />
