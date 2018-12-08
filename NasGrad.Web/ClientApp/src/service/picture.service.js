@@ -18,3 +18,24 @@ export const getAllPictures = () => {
             return Promise.reject(error);
         });
 }
+
+export const updatePicture = (id, visible) => {
+    const headers = {
+        "Content-Type": "application/json"
+    };
+    const requestOptions = {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(id, visible)
+    };
+
+    const url = apiUrl + `/Picture?id=` + id + '&visible=' + visible;
+    return fetch(url, requestOptions)
+        .then(handleResponse)
+        .catch(error => {
+            if (error.message) {
+                return Promise.reject("Unable to update picture");
+            }
+            return Promise.reject(error);
+        });
+}

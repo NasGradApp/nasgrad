@@ -27,7 +27,30 @@ export const actionCreators = {
             }
         );
     },
-    
+
+    updatePicture: (id, visible) => async (dispatch, getState) => {
+        if (getState().picture.isLoading) {
+            // Prevent duplicate requests to the API
+            return;
+        }
+
+        dispatch({ type: actionType.updatePictureStarted });
+
+        pictureService.updatePicture(id, visible).then(
+            data => {
+                dispatch({
+                    type: actionType.updatePictureSucceded,
+                    data: data
+                });
+            },
+            error => {
+                dispatch({
+                    type: actionType.updatePictureFailed,
+                    error: error
+                });
+            }
+        );
+    },
 };
 
 
@@ -37,7 +60,8 @@ const initialState = {
     isLoading: false,
     error: null,
     data: null,
-    activePage: 1
+    activePage: 1,
+    isUpdatedSuccessfully: false
 };
 
 export const reducer = (state, action) => {
@@ -64,6 +88,33 @@ export const reducer = (state, action) => {
         return {
             ...state,
             data: null,
+            error: action.error,
+            isLoading: false
+        };
+    }
+
+    if (action.type === actionType.updatePictureStarted) {
+        return {
+            ...state,
+            error: null,
+            isLoading: true,
+            isUpdatedSuccessfully: false
+        };
+    }
+
+    if (action.type === actionType.updatePictureSucceded) {
+        return {
+            ...state,
+            data: action.data,
+            error: null,
+            isLoading: false,
+            isUpdatedSuccessfully: true
+        };
+    }
+
+    if (action.type === actionType.updatePictureFailed) {
+        return {
+            ...state,
             error: action.error,
             isLoading: false
         };

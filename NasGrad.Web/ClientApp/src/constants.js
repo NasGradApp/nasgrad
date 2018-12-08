@@ -49,7 +49,10 @@ export const actionTypes = {
     picture: {
         getPageStartedPicture: "PICTURE_GET_PAGE_STARTED",
         getPageSucceededPicture: "PICTURE_GET_PAGE_SUCCEEDED",
-        getPageFailedCPicture: "PICTURE_GET_PAGE_FAILED"
+        getPageFailedCPicture: "PICTURE_GET_PAGE_FAILED",
+        updatePictureStarted: "PICTURE_UPDATE_STARTED",
+        updatePictureSucceded: "PICTURE_PDATE_SUCCEDED",
+        updatePictureFailed: "PICTURE_UPDATE_FAILED"
     }
 
 };

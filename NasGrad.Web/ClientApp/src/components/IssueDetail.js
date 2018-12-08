@@ -24,8 +24,6 @@ class IssueDetail extends Component {
         super(props);
     }
 
-    mapRef = createRef()
-
     componentWillMount() {
         const { id } = this.props.match.params;
         this.props.issuesActionCreators.getIssue(id);
@@ -34,10 +32,12 @@ class IssueDetail extends Component {
         this.props.pictureActionCreators.getAllPictures();
     }
 
-    updateIssue(e) {
-        // this.updatedIssueObject.pictures.visible === true;
-        // this.props.updateIssue(this.updateIssue.id, this.updatedIssueObject);
+    mapRef = createRef()
+
+    updateIssue(id) {
+        this.props.pictureActionCreators.updatePicture(id.item, true);
     }
+
 
     getCategoryName(id) {
         var allCategories = this.props.category.data;
@@ -105,10 +105,8 @@ class IssueDetail extends Component {
             showForm = false;
         }
 
-        const dLat = issueObject.location.langitude;
+        const dLat = issueObject.location.latitude;
         const dLng = issueObject.location.longitude;
-        const picture = allPictures[0].content;
-        const imgSrc = `data:image/jpeg;base64,${picture}`;
 
         const isPictureVisible = true;
 
@@ -119,37 +117,10 @@ class IssueDetail extends Component {
             <div className="alert alert-danger col-sm-12">Nothing for update</div>
         );
 
-        const approveButton = (isPictureVisible) ? (
-            <Button
-                bsStyle="info"
-                href="#" type="submit"
-            >Approve
-                                            </Button>
-        ) : (<Button
-            bsStyle="info"
-            href="#" type="submit"
-        >Approve
-                                            </Button>);
-
 
         const clickOnHide = (
             isPictureVisible === false
         );
-
-        const hideButton = (isPictureVisible) ? (
-            <Button
-                bsStyle="info"
-                href="#"
-                type="submit"
-            >Hide
-             </Button>
-        ) : (<Button
-            bsStyle="info"
-            href="#"
-            type="submit"
-            disabled
-        >Hide
-            </Button>);
 
         const form = (
             <form>
@@ -228,17 +199,25 @@ class IssueDetail extends Component {
                                         <div className="topMargin">
                                             <ButtonGroup justified >
                                                 <OverlayTrigger delay={750} trigger={['hover', 'focus']} placement="bottom" >
-                                                    {approveButton}
+                                                    <Button
+                                                        bsStyle="info"
+                                                        href="#" type="submit"
+                                                    >Approve
+                                            </Button>
                                                 </OverlayTrigger>
-                                                {hideButton}
+                                                <Button
+                                                    bsStyle="info"
+                                                    href="#"
+                                                    type="submit"
+                                                >Hide
+                                                </Button>
                                             </ButtonGroup>
                                         </div>
                                     </div>
                                 );
                             }
-                            )};
+                            )}
                         </div>
-                        
                     </div>
                 </div>
             </div>
