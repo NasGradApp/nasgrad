@@ -10,6 +10,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.IO;
+using ImageMagick;
 
 namespace NasGrad.API.Controllers
 {
@@ -41,15 +42,19 @@ namespace NasGrad.API.Controllers
 
         private string ResizeImage(string b64Img, int width, int height)
         {
-            var bstream = new MemoryStream(Convert.FromBase64String(b64Img));
-
-            using (var image = new Bitmap(bstream))
+            try
             {
-                var resized = new Bitmap(width, height);
-                var outstream = new MemoryStream();
-                resized.Save(outstream, ImageFormat.Jpeg);
-
-                return Convert.ToBase64String(outstream.GetBuffer());
+                using (var image = new MagickImage(Convert.FromBase64String(b64Img)))
+                {
+                    image.Resize(width, height);
+                    image.Strip();
+                    image.Quality = 50;
+                    return image.ToBase64();
+                }
+            }
+            catch (Exception ex)
+            {
+                return b64Img;
             }
         }
     }
