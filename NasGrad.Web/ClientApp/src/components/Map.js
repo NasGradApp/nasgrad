@@ -22,6 +22,21 @@ class List extends Component {
             lng: defaultLng
         };
 
+        let markers = items.map(item => {
+            const location = {
+                lat: item.location.latitude,
+                lng: item.location.longitude
+            };
+
+            mapCenter = location;
+
+            return (
+                <Marker key={"loc-" + item.id} position={location}>
+                    <Popup>{item.title}</Popup>
+                </Marker>
+            );
+        });
+
         return (
             <div>
                 <div className="openStreetMapBlock">
@@ -31,6 +46,7 @@ class List extends Component {
                             attribution="&amp;copy <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
                             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         />
+                        {markers}
                     </Map>
                 </div>
             </div>
