@@ -17,6 +17,7 @@ import "../style/pictureSettup.css";
 import "../style/row.css";
 import "../style/column.css";
 import "../style/topMargin.css";
+import "../style/buttons.css";
 
 class IssueDetail extends Component {
 
@@ -198,17 +199,20 @@ class IssueDetail extends Component {
                                     <div>
                                         <img src={this.getPicture({ item })} className="pictureSettup" />
                                         <div className="topMargin">
-                                            <ButtonGroup justified >
-                                                    <Button
+                                            <ButtonGroup justified>
+                                                <Button
+                                                    className="buttons"
                                                         bsStyle="info"
-                                                    href="#" type="submit"
+                                                    href="#" type="submit" 
                                                     onClick={() => this.updateIssue( item )}
                                                 >Approve
                                             </Button>
                                                 <Button
+                                                    className="buttons"
                                                     bsStyle="info"
                                                     href="#"
                                                     type="submit"
+                                                    hidden="hidden"
                                                 >Hide
                                                 </Button>
                                             </ButtonGroup>
