@@ -5,13 +5,15 @@ import * as usersStore from './users.store';
 import * as issuesStore from './issues.store';
 import * as categoryStore from './category.store';
 import * as typesStore from './type.store';
+import * as pictureStore from './picture.store';
 
 export default function configureStore(history, initialState) {
     const reducers = {
         users: usersStore.reducer,
         issues: issuesStore.reducer,
         category: categoryStore.reducer,
-        types: typesStore.reducer
+        types: typesStore.reducer,
+        picture: pictureStore.reducer
     };
 
     const middleware = [

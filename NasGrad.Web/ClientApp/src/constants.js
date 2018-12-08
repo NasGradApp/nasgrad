@@ -45,6 +45,11 @@ export const actionTypes = {
         getPageStartedTypes: "TYPES_GET_PAGE_STARTED",
         getPageSucceededTypes: "TYPES_GET_PAGE_SUCCEEDED",
         getPageFailedTypes: "TYPES_GET_PAGE_FAILED"
+    },
+    picture: {
+        getPageStartedPicture: "PICTURE_GET_PAGE_STARTED",
+        getPageSucceededPicture: "PICTURE_GET_PAGE_SUCCEEDED",
+        getPageFailedCPicture: "PICTURE_GET_PAGE_FAILED"
     }
 
 };

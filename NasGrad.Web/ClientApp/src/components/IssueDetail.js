@@ -6,6 +6,7 @@ import { bindActionCreators } from "redux";
 import { actionCreators as issuesActionCreators } from '../store/issues.store';
 import { actionCreators as categoryActionCreators } from '../store/category.store';
 import { actionCreators as typeActionCreators } from '../store/type.store';
+import { actionCreators as pictureActionCreators } from '../store/picture.store';
 import { Button, ButtonGroup, FormControl, Well, Label, Panel, FormGroup, HelpBlock, Popover, OverlayTrigger } from "react-bootstrap";
 
 import L from "leaflet";
@@ -30,6 +31,7 @@ class IssueDetail extends Component {
         this.props.issuesActionCreators.getIssue(id);
         this.props.categoryActionCreators.getAllCategories();
         this.props.typeActionCreators.getAllCategories();
+        this.props.pictureActionCreators.getAllPictures();
     }
 
     updateIssue(e) {
@@ -56,7 +58,7 @@ class IssueDetail extends Component {
         }
         return null;
     }
-    
+
     getStatusIssue(id) {
         const statusIssue = {
             "1": 'Submitted',
@@ -72,13 +74,26 @@ class IssueDetail extends Component {
         return null;
     };
 
+    getPicture(id) {
+        const imgSrc = `data:image/jpeg;base64,`;
+        var allPictures = this.props.picture.data;
+        for (var i = 0; i < allPictures.length; ++i) {
+            if (allPictures[i].id === id.item) {
+                return imgSrc + allPictures[i].content;
+            }
+        }
+        return null;
+    }
+
     render() {
 
         const issueObject = this.props.issues.issue;
         const allCategories = this.props.category.data;
         const allTypes = this.props.types.data;
+        const allPictures = this.props.picture.data;
 
-        if ((issueObject === null || issueObject === undefined) || (allCategories === null || allCategories === undefined) || (allTypes === null || allTypes === undefined)) {
+        if ((issueObject === null || issueObject === undefined) || (allCategories === null || allCategories === undefined)
+            || (allTypes === null || allTypes === undefined) || (allPictures === null || allPictures === undefined)) {
             return "";
         }
 
@@ -92,9 +107,9 @@ class IssueDetail extends Component {
 
         const dLat = issueObject.location.langitude;
         const dLng = issueObject.location.longitude;
-        const picture = issueObject.picturePreview;
+        const picture = allPictures[0].content;
         const imgSrc = `data:image/jpeg;base64,${picture}`;
-        
+
         const isPictureVisible = true;
 
         const hasLocation = (dLat && dLng);
@@ -103,8 +118,6 @@ class IssueDetail extends Component {
         const errorHappened = (
             <div className="alert alert-danger col-sm-12">Nothing for update</div>
         );
-
-
 
         const approveButton = (isPictureVisible) ? (
             <Button
@@ -193,10 +206,10 @@ class IssueDetail extends Component {
                 <div className="column">
                     <div className="panel panel-info">
                         <div className="panel-heading">
-                            <div className="panel-title">Problem:</div>
+                            <div className="panel-title">Opis problema:</div>
                         </div>
                         <div className="panel-body">
-                            {(this.props.issues.isLoading || this.props.category.isLoading || this.props.types.isLoading) ? <p>Loading...</p> : null}
+                            {(this.props.issues.isLoading || this.props.category.isLoading || this.props.types.isLoading || this.props.picture.isLoading) ? <p>Loading...</p> : null}
                             {(error) ? errorHappened : ""}
                             {(showForm) ? form : ""}
                         </div>
@@ -208,23 +221,30 @@ class IssueDetail extends Component {
                             <div className="panel-title">Slike:</div>
                         </div>
                         <div >
-                            <img src={imgSrc} className="pictureSettup" />
+                            {issueObject.pictures.map((item, rowIndex) => {
+                                return (
+                                    <div>
+                                        <img src={this.getPicture({ item })} className="pictureSettup" />
+                                        <div className="topMargin">
+                                            <ButtonGroup justified >
+                                                <OverlayTrigger delay={750} trigger={['hover', 'focus']} placement="bottom" >
+                                                    {approveButton}
+                                                </OverlayTrigger>
+                                                {hideButton}
+                                            </ButtonGroup>
+                                        </div>
+                                    </div>
+                                );
+                            }
+                            )};
                         </div>
-                        <div className="topMargin">
-                            <ButtonGroup justified >
-                                <OverlayTrigger delay={750} trigger={['hover', 'focus']} placement="bottom" >
-                                    {approveButton}
-                                </OverlayTrigger>
-                                {hideButton}
-                            </ButtonGroup>
-                        </div>
+                        
                     </div>
                 </div>
             </div>
         );
 
     }
-
 
 }
 
@@ -233,14 +253,16 @@ export default connect(
         return {
             issues: state.issues,
             category: state.category,
-            types: state.types
+            types: state.types,
+            picture: state.picture
         };
     },
     dispatch => {
         return {
             issuesActionCreators: bindActionCreators(issuesActionCreators, dispatch),
             categoryActionCreators: bindActionCreators(categoryActionCreators, dispatch),
-            typeActionCreators: bindActionCreators(typeActionCreators, dispatch)
+            typeActionCreators: bindActionCreators(typeActionCreators, dispatch),
+            pictureActionCreators: bindActionCreators(pictureActionCreators, dispatch)
         };
     }
 )(IssueDetail);
