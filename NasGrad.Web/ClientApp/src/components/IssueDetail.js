@@ -35,7 +35,8 @@ class IssueDetail extends Component {
     mapRef = createRef()
 
     updateIssue(id) {
-        this.props.pictureActionCreators.updatePicture(id.item, true);
+        this.props.pictureActionCreators.updatePicture(id, true);
+        console.log("kliknuli smo");
     }
 
 
@@ -198,13 +199,12 @@ class IssueDetail extends Component {
                                         <img src={this.getPicture({ item })} className="pictureSettup" />
                                         <div className="topMargin">
                                             <ButtonGroup justified >
-                                                <OverlayTrigger delay={750} trigger={['hover', 'focus']} placement="bottom" >
                                                     <Button
                                                         bsStyle="info"
-                                                        href="#" type="submit"
-                                                    >Approve
+                                                    href="#" type="submit"
+                                                    onClick={() => this.updateIssue( item )}
+                                                >Approve
                                             </Button>
-                                                </OverlayTrigger>
                                                 <Button
                                                     bsStyle="info"
                                                     href="#"
