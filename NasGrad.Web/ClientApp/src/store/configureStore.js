@@ -1,14 +1,18 @@
 ﻿import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import { routerReducer, routerMiddleware } from 'react-router-redux';
+import { createBrowserHistory } from 'history';
 import * as usersStore from './users.store';
 import * as issuesStore from './issues.store';
 
-export default function configureStore(history, initialState) {
+export default function configureStore(initialState) {
     const reducers = {
         users: usersStore.reducer,
         issues: issuesStore.reducer
     };
+
+    const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
+    const history = createBrowserHistory({ basename: baseUrl });
 
     const middleware = [
         thunk,
