@@ -14,5 +14,8 @@ namespace NasGrad.DBEngine
         Task<List<NasGradPicture>> GetPictures();
         Task<NasGradPicture> GetPicture(string id);
         Task<bool> SetVisibility(string id, bool visible);
+
+        Task InsertPicture(NasGradPicture pic);
+        Task InsertNewIssue(NasGradIssue issue);
     }
 }
