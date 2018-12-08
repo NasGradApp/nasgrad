@@ -27,12 +27,16 @@ class List extends Component {
                 lat: item.location.latitude,
                 lng: item.location.longitude
             };
-
+            const urlDetails = `/issuedetail/${item.id}`;
             mapCenter = location;
 
             return (
                 <Marker key={"loc-" + item.id} position={location}>
-                    <Popup>{item.title}</Popup>
+                    <Popup>
+                        {item.title}
+                        <br />
+                        <a href={urlDetails}>Detalji</a>
+                    </Popup>
                 </Marker>
             );
         });
