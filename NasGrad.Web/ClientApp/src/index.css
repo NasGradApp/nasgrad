@@ -4,3 +4,23 @@
         padding-top: 50px;
     }
 }
+
+.nav-bg {
+    background: linear-gradient(180deg, #FFAA06 0%, #FF7700 100%);
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 1);
+}
+
+.card-bg {
+    border-radius: 10px;
+    background-color: #FFFFFF;
+    box-shadow: 0 8px 18px 0 rgba(0,0,0,0.12);
+    overflow: hidden;
+}
+
+body {
+    background-color: #F1F1F1;
+}
+
