@@ -19,7 +19,7 @@ const NavMenu = props => (
                         <Glyphicon glyph='home' /> Home
                     </NavItem>
                 </LinkContainer>
-                <LinkContainer to={"/issuedetail/1dcfc125-7df9-4d81-af3b-14c8c7b47bfe"} exact>
+                <LinkContainer to={"/issuedetail"} exact>
                     <NavItem>
                         <Glyphicon glyph="issuedetail" /> Issue Detail
                     </NavItem>

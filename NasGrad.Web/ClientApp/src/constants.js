@@ -34,5 +34,11 @@ export const actionTypes = {
         getIssueSucceeded: "ISSUE_GET_SUCCEEDED",
         getIssueFailed: "ISSUE_GET_FAILED",
         getIssueStarted: "ISSUE_GET_STARTED"
+    },
+    category: {
+        getPageSucceededCategory: "CATEGORY_GET_PAGE_SUCCEEDED",
+        getPageFailedCategory: "CATEGORY_GET_PAGE_FAILED",
+        getPageStartedCategory: "CATEGORY_GET_PAGE_STARTED",
+        setActivePageCategory: "CATEGORY_SET_ACTIVE_PAGE"
     }
 };
