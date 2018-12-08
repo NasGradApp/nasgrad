@@ -17,6 +17,7 @@ The [`nasgrad`](https://github.com/NasGradApp/nasgrad) repository is where we do
 
 ### Make the change
 
+1. Make sure to follow [Coding Guidelines](https://github.com/NasGradApp/nasgrad/blob/development/CodingGuidelines.md)
 1. Save the files and check in the browser and mobile app
 1. Make sure that the new change doesn't already exist as functionality
 
