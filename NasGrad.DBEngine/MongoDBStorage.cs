@@ -133,5 +133,23 @@ namespace NasGrad.DBEngine
                 throw new MongoDBStorageException($"Error while adding new item in Issue collection.", e);
             }
         }
+
+        public async Task<bool> UpdateIssueStatus(string id, int statusId)
+        {
+            try
+            {
+                var updateIssueStatus = Builders<NasGradIssue>.Update.Set(c => c.State, (StateEnum)statusId);
+                var dbCollection = _database.GetCollection<NasGradIssue>(Constants.IssueTableName);
+                await dbCollection.UpdateOneAsync(
+                    Builders<NasGradIssue>.Filter.Eq(d => d.Id, id),
+                    updateIssueStatus
+                );
+                return true;
+            }
+            catch (System.Exception e)
+            {
+                throw new MongoDBStorageException($"Error while adding new item in Pictures collection.", e);
+            }
+        }
     }
 }

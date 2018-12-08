@@ -17,5 +17,6 @@ namespace NasGrad.DBEngine
 
         Task InsertPicture(NasGradPicture pic);
         Task InsertNewIssue(NasGradIssue issue);
+        Task<bool> UpdateIssueStatus(string id, int statusId);
     }
 }

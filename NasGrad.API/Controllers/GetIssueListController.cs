@@ -28,6 +28,14 @@ namespace NasGrad.API.Controllers
             var result = await _dbStorage.GetIssues();
             return Ok(result);
         }
+
+        [HttpPut("UpdateIssueStatus")]
+        public async Task<IActionResult> UpdateIssueStatus(string id, int statusId)
+        {
+            var result = await _dbStorage.UpdateIssueStatus(id, statusId);
+            return Ok(result);
+        }
+
     }
 }
 
