@@ -1,19 +1,6 @@
 version: '3.4'
 
 services:
-  nasgrad.web:
-    build:
-      context: .
-      dockerfile: NasGrad.Web/Dockerfile
-      args: 
-        ADDRESS_OF_API: http://${HOST_CURRENT_ADDRESS}:8080 
-    image:
-      nasgradweb
-    ports:
-     - "80:80"
-    networks:
-     - nasgrad-network
-
   nasgrad.api:
     build:
       context: .
@@ -31,6 +18,8 @@ services:
     image: mongo
     ports: 
      - "27017:27017"
+    networks:
+     - nasgrad-network
   
 networks:
   nasgrad-network:
