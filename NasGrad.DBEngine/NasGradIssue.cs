@@ -14,7 +14,7 @@ namespace NasGrad.DBEngine
         public List<string> Categories { get; set; }
         public IssueLocation Location { get; set; }
         public string PicturePreview { get; set; }
-        public int SubmitedCount { get; set; }
+        public int SubmittedCount { get; set; }
     }
 
     public enum StateEnum
