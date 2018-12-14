@@ -19,9 +19,21 @@ services:
     image: 
       nasgradapi
     ports:
-     - "8080:80"
+     - "8080:8080"
     environment:
       - MONGO_URL=mongodb://mongo:27017/app_development
+
+  nasgrad.web:
+    build:
+      context: .
+      dockerfile: NasGrad.Web/Dockerfile
+      args: 
+        ADDRESS_OF_API: http://${HOST_CURRENT_ADDRESS}:8080 
+    image:
+      nasgradweb
+    ports:
+    - "80:80"
+    
 
   
 volumes:

@@ -21,7 +21,7 @@ COPY ./ ./
 WORKDIR /src/NasGrad.Web
 
 RUN rm ClientApp/src/apiConfig.js
-RUn echo "export const host=\""$ADDRESS_OF_API"\";" > ClientApp/src/apiConfig.js
+RUn echo "export const apiHost=\""$ADDRESS_OF_API"\";" > ClientApp/src/apiConfig.js
 
 RUN dotnet build NasGrad.Web.csproj -c Release -o /app
 
