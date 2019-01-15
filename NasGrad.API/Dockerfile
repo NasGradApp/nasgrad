@@ -22,11 +22,19 @@ COPY --from=publish /app .
 
 ARG APPLICATION_SETTINGS
 ENV APPLICATION_SETTINGS=$APPLICATION_SETTINGS
+ARG MONGODB_USERNAME
+ENV MONGODB_USERNAME=$MONGODB_USERNAME
+ARG MONGODB_PASSWORD
+ENV MONGODB_PASSWORD=$MONGODB_PASSWORD
+
 
 COPY scripts_and_setup/configuration/ /app/configuration/
 
 RUN echo "settings file: $APPLICATION_SETTINGS" && \
     rm /app/appsettings* && \
     cp /app/configuration/$APPLICATION_SETTINGS /app/appsettings.json
+
+RUN sed -i "s|thedbusername|$MONGODB_USERNAME|g" /app/appsettings.json            
+RUN sed -i "s|thedbpassword|$MONGODB_PASSWORD|g" /app/appsettings.json            
 
 ENTRYPOINT ["dotnet", "NasGrad.API.dll"]

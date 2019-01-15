@@ -47,9 +47,10 @@ namespace NasGrad.API
 
             var appSettings = appSettingsSection.Get<AppSettings>();
             var dbSettings = appSettings.DB;
+            
+            var dbClient = NasGrad.DBEngine.MongoDBUtil.CreateMongoClient(dbSettings.ServerAddress, dbSettings.ServerPort, dbSettings.Username, dbSettings.Password);            
+            var mongoDatabase = dbClient.GetDatabase(dbSettings.DbName);            
 
-            var connectionString = $"mongodb://{dbSettings.ServerAddress}:{dbSettings.ServerPort}"; 
-            var mongoDatabase = new MongoDB.Driver.MongoClient(connectionString).GetDatabase(dbSettings.DbName);
             services.AddSingleton(typeof(MongoDB.Driver.IMongoDatabase), mongoDatabase);
             services.AddSingleton<DBEngine.IDBStorage, DBEngine.MongoDBStorage>();
         }

@@ -11,6 +11,8 @@ namespace NasGrad.DBEngine
     {
         private readonly string _serverAddress;
         private readonly string _serverPort;
+        private readonly string _username;
+        private readonly string _password;
         private readonly string _dbName;
 
         private IMongoDatabase _db;
@@ -19,12 +21,13 @@ namespace NasGrad.DBEngine
         private IMongoCollection<NasGradCategory> _categoryCollection;
         private IMongoCollection<NasGradPicture> _pictureCollection;
 
-        private IDBStorage _dbStorage;
 
-        public MongoDBInitializer(string serverAddress, string serverPort, string dbName)
+        public MongoDBInitializer(string serverAddress, string serverPort, string username, string password, string dbName)
         {
             _serverAddress = serverAddress;
             _serverPort = serverPort;
+            _username = username;
+            _password = password;
             _dbName = dbName;
         }
 
@@ -46,15 +49,7 @@ namespace NasGrad.DBEngine
         {
             Console.WriteLine("Create database");
 
-            // Database settings
-            var settings = new MongoClientSettings
-            {
-                Server = new MongoServerAddress(
-                    _serverAddress,
-                    Convert.ToInt32(_serverPort))
-            };
-
-            var client = new MongoClient(settings);
+            var client = MongoDBUtil.CreateMongoClient(_serverAddress, _serverPort, _username, _password);
             client.DropDatabase(_dbName);
             _db = client.GetDatabase(_dbName);
         }

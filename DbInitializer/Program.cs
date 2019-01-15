@@ -18,13 +18,26 @@ namespace DbInitializer
             {
                 Console.WriteLine("DB initialization started\n");
 
-                InitializeConfiguration();
-                ValidateConfiguration();
+                Console.WriteLine("\nEnter server address:");
+		string serverAddress = Console.ReadLine();
+                Console.WriteLine("Enter server port:");
+		string serverPort = Console.ReadLine();
+                Console.WriteLine("Enter DB username:");
+		string dbUsername = Console.ReadLine();
+                Console.WriteLine("Enter DB password:");
+		string dbPassword = Console.ReadLine();
+                Console.WriteLine("Enter DBName:");
+		string dbName = Console.ReadLine();
+
+                //InitializeConfiguration();
+                //ValidateConfiguration();
 
                 var initializer = new MongoDBInitializer(
-                   Configuration["serverAddress"],
-                   Configuration["serverPort"],
-                   Configuration["DbName"]);
+                   serverAddress,
+                   serverPort,
+                   dbUsername,
+                   dbPassword,
+                   dbName);
 
                 initializer.Initialize();
 
