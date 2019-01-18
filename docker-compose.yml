@@ -21,21 +21,33 @@ services:
         APPLICATION_SETTINGS: "appsettings-api.json"
         MONGODB_USERNAME: ${MONGODB_USERNAME}
         MONGODB_PASSWORD: ${MONGODB_PASSWORD}
+    environment:
+      ASPNETCORE_URLS: ${ASPNETCORE_URLS}
+      ASPNETCORE_Kestrel__Certificates__Default__Password: ${ASPNETCORE_KESTREL_CERTIFICATE_PASSWORD}
+      ASPNETCORE_Kestrel__Certificates__Default__Path: ${ASPNETCORE_KESTREL_CERTIFICATE_PATH}
     image: 
       nasgradapi
-    ports:
-     - "8080:80"
+    ports:     
+     - "8081:443"
+    volumes:
+      - ${CERTIFICATE_PATH}:/root/.dotnet/https
 
   nasgrad.web:
     build:
       context: .
       dockerfile: NasGrad.Web/Dockerfile
       args: 
-        ADDRESS_OF_API: http://${HOST_CURRENT_ADDRESS}:8080 
+        ADDRESS_OF_API: https://${HOST_CURRENT_ADDRESS}:8081 
     image:
       nasgradweb
     ports:
-    - "80:80"
-  
+    - "443:443"
+    volumes:
+      - ${CERTIFICATE_PATH}:/root/.dotnet/https
+    environment:
+      ASPNETCORE_URLS: ${ASPNETCORE_URLS}
+      ASPNETCORE_Kestrel__Certificates__Default__Password: ${ASPNETCORE_KESTREL_CERTIFICATE_PASSWORD}
+      ASPNETCORE_Kestrel__Certificates__Default__Path: ${ASPNETCORE_KESTREL_CERTIFICATE_PATH}
+
 volumes:
   mongo:

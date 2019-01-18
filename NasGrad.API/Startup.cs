@@ -28,8 +28,9 @@ namespace NasGrad.API
         {
             services.AddCors(options =>
             {
-                options.AddPolicy("CorsPolicy",
-                    builder => builder.AllowAnyOrigin()
+                options.AddPolicy("CorsPolicyAnyOrigin",
+                    builder => 
+                 builder.AllowAnyOrigin()
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials());
@@ -58,6 +59,8 @@ namespace NasGrad.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseCors("CorsPolicyAnyOrigin");
+
             if (env.IsDevelopment())
             {
                 app.UseSwagger();
@@ -72,11 +75,9 @@ namespace NasGrad.API
             {
                 app.UseHsts();
             }
-
-            app.UseCors("CorsPolicy");
+            
             app.UseHttpsRedirection();
             app.UseMvc();
-
         }
     }
 }
