@@ -59,7 +59,8 @@
       "description": "to je to nemam sta drugo da dodam",
       "issueType": "C9ACEA7E-B44A-45C9-8F5B-2F67B104D491",
       "state": "Submitted",
-      "submittedCount":  1,
+      "submittedCount": 1,
+      "isApproved": true,
       "pictures": [
         "8BE50F42-6F47-458A-A75D-FBD54A1BA2DA",
         "7F2E741C-196C-4C86-9ED2-2267D2414838"
@@ -82,6 +83,7 @@
       "issueType": "C9ACEA7E-B44A-45C9-8F5B-2F67B104D491",
       "state": "Submitted",
       "submittedCount": 1,
+      "isApproved": true, 
       "pictures": [
         "44F69B92-60EB-40E7-90EC-14901C29A761",
         "B1260087-7FFF-4797-9257-4ADBE41F27D3"
