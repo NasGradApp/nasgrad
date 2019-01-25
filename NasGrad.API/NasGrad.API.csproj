@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NasGrad.Common\NasGrad.Common.csproj" />
     <ProjectReference Include="..\NasGrad.DBEngine\NasGrad.DBEngine.csproj" />
   </ItemGroup>
 

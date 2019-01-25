@@ -7,6 +7,7 @@ namespace NasGrad.DBEngine
     {
         Task<List<NasGradType>> GetConfiguration();
         Task<List<NasGradIssue>> GetIssues();
+        Task<List<NasGradIssue>> GetAllIssues();
         Task<NasGradIssue> GetIssue(string issueId);
         Task<List<NasGradCategory>> GetCategories();
         Task<List<NasGradCategory>> GetSelectedCategories(string[] ids);
@@ -18,5 +19,7 @@ namespace NasGrad.DBEngine
         Task InsertPicture(NasGradPicture pic);
         Task InsertNewIssue(NasGradIssue issue);
         Task<bool> UpdateIssueStatus(string id, int statusId);
+        Task<NasGradUser> GetUser(string username);
+        Task<NasGradRole> GetRole(string roleId);
     }
 }

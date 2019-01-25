@@ -15,6 +15,7 @@ namespace NasGrad.DBEngine
         public IssueLocation Location { get; set; }
         public string PicturePreview { get; set; }
         public int SubmittedCount { get; set; }
+        public bool IsApproved { get; set; }
     }
 
     public enum StateEnum

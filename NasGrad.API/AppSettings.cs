@@ -2,6 +2,9 @@
 {
     public class AppSettings
     {
+        public string JwtSecret { get; set; }
+        public string JwtIssuer { get; set; }
+        public int JwtTokenValidity { get; set; }
         public DB DB { get; set; }
     }
 

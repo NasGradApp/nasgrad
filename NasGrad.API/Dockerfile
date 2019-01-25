@@ -27,6 +27,8 @@ ARG MONGODB_USERNAME
 ENV MONGODB_USERNAME=$MONGODB_USERNAME
 ARG MONGODB_PASSWORD
 ENV MONGODB_PASSWORD=$MONGODB_PASSWORD
+ARG JWT_SECRET
+ENV JWT_SECRET=$JWT_SECRET
 
 
 COPY scripts_and_setup/configuration/ /app/configuration/
@@ -37,5 +39,6 @@ RUN echo "settings file: $APPLICATION_SETTINGS" && \
 
 RUN sed -i "s|thedbusername|$MONGODB_USERNAME|g" /app/appsettings.json            
 RUN sed -i "s|thedbpassword|$MONGODB_PASSWORD|g" /app/appsettings.json            
+RUN sed -i "s|thisissplaceholderforthejwtsecret|$JWT_SECRET|g" /app/appsettings.json            
 
 ENTRYPOINT ["dotnet", "NasGrad.API.dll"]

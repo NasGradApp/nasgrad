@@ -25,6 +25,14 @@ namespace NasGrad.DBEngine
         public async Task<List<NasGradIssue>> GetIssues()
         {
             var dbCollection = _database.GetCollection<NasGradIssue>(Constants.IssueTableName);
+            var result = await dbCollection.Find(issue => issue.IsApproved == true).ToListAsync();
+
+            return result;
+        }
+
+        public async Task<List<NasGradIssue>> GetAllIssues()
+        {
+            var dbCollection = _database.GetCollection<NasGradIssue>(Constants.IssueTableName);
             var result = await dbCollection.Find(FilterDefinition<NasGradIssue>.Empty).ToListAsync();
 
             return result;
@@ -150,6 +158,30 @@ namespace NasGrad.DBEngine
             {
                 throw new MongoDBStorageException($"Error while adding new item in Pictures collection.", e);
             }
+        }
+
+        public async Task<NasGradUser> GetUser(string username)
+        {
+            var dbCollection = _database.GetCollection<NasGradUser>(Constants.UserTableName);
+            var result = await dbCollection.Find(i => string.Equals(i.Username, username)).ToListAsync();
+            if (result.Count == 0 || result.Count > 1)
+            {
+                return null;
+            }
+
+            return result[0];
+        }
+
+        public async Task<NasGradRole> GetRole(string roleId)
+        {
+            var dbCollection = _database.GetCollection<NasGradRole>(Constants.RoleTableName);
+            var result = await dbCollection.Find(i => string.Equals(i.Id, roleId)).ToListAsync();
+            if (result.Count == 0 || result.Count > 1)
+            {
+                return null;
+            }
+
+            return result[0];
         }
     }
 }
