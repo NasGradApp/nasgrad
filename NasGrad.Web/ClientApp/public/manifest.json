@@ -1,6 +1,6 @@
 {
-  "short_name": "NasGrad.Web",
-  "name": "NasGrad.Web",
+  "short_name": "NasGrad",
+  "name": "NasGrad web portal",
   "icons": [
     {
       "src": "favicon.ico",

@@ -30,10 +30,10 @@ namespace NasGrad.DBEngine
             return result;
         }
 
-        public async Task<List<NasGradIssue>> GetAllIssues()
+        public async Task<List<NasGradIssue>> GetAllIssuesForApproval()
         {
             var dbCollection = _database.GetCollection<NasGradIssue>(Constants.IssueTableName);
-            var result = await dbCollection.Find(FilterDefinition<NasGradIssue>.Empty).ToListAsync();
+            var result = await dbCollection.Find(c => c.IsApproved == false).ToListAsync();
 
             return result;
         }
@@ -112,7 +112,7 @@ namespace NasGrad.DBEngine
             }
             catch (System.Exception e)
             {
-                throw new MongoDBStorageException($"Error while adding new item in Pictures collection.", e);
+                throw new MongoDBStorageException($"Error while setting visibility in Pictures collection.", e);
             }
         }
 
@@ -156,7 +156,39 @@ namespace NasGrad.DBEngine
             }
             catch (System.Exception e)
             {
-                throw new MongoDBStorageException($"Error while adding new item in Pictures collection.", e);
+                throw new MongoDBStorageException($"Error while updating issue status.", e);
+            }
+        }
+
+        public async Task<bool> ApproveIssue(string issueId)
+        {
+            try
+            {
+                var updateIssueStatus = Builders<NasGradIssue>.Update.Set(c => c.IsApproved, true);
+                var dbCollection = _database.GetCollection<NasGradIssue>(Constants.IssueTableName);
+                await dbCollection.UpdateOneAsync(
+                    Builders<NasGradIssue>.Filter.Eq(d => d.Id, issueId),
+                    updateIssueStatus
+                );
+                return true;
+            }
+            catch (System.Exception e)
+            {
+                throw new MongoDBStorageException($"Error while approving issue.", e);
+            }
+        }
+
+        public async Task<bool> DeleteIssue(string issueId)
+        {
+            try
+            {
+                var dbCollection = _database.GetCollection<NasGradIssue>(Constants.IssueTableName);
+                await dbCollection.DeleteOneAsync(Builders<NasGradIssue>.Filter.Eq(d => d.Id, issueId));
+                return true;
+            }
+            catch (System.Exception e)
+            {
+                throw new MongoDBStorageException($"Error while approving issue.", e);
             }
         }
 
@@ -183,5 +215,7 @@ namespace NasGrad.DBEngine
 
             return result[0];
         }
+
+        
     }
 }

@@ -1,55 +1,50 @@
-﻿import * as usersService from "../service/users.service";
+﻿import * as userService from "../service/users.service";
 import { actionTypes, storageKeys } from "../constants";
 
-const actionType = actionTypes.users;
+const userActionType = actionTypes.users;
 
 export const actionCreators = {
     userLogin: (username, password) => async (dispatch, getState) => {
-        if (getState().user.isLoading) {
+        if (getState().user && getState().user.isLoading) {
             // Prevent duplicate requests to the API
             return;
         }
 
-        dispatch({ type: actionType.loginStarted });
+        dispatch({ type: userActionType.loginStarted });
 
-        usersService.login(username, password).then(
+        userService.login(username, password).then(
             user => {
-                usersService.saveLoginData(user);
                 dispatch({
-                    type: actionType.loginSucceeded,
+                    type: userActionType.loginSucceeded,
                     user: user
+                });
+                dispatch({
+                    type: actionTypes.RESET
                 });
             },
             error => {
                 dispatch({
-                    type: actionType.loginFailed,
+                    type: userActionType.loginFailed,
                     error: error
                 });
             }
         );
     },
     userLogout: () => async (dispatch, getState) => {
-        usersService.logout();
+        userService.logout();
         dispatch({
-            type: actionType.logout
+            type: userActionType.logout
         });
     },
     clearError: () => async (dispatch, getState) => {
         dispatch({
-            type: actionType.clearError
+            type: userActionType.clearError
         });
     },
     unauthorized: () => async (dispatch, getState) => {
-        usersService.logout();
+        userService.logout();
         dispatch({
-            type: actionType.unauthorized
-        });
-    },
-    saveUserLogin: (user) => async (dispatch, getState) => {
-        usersService.saveLoginData(user);
-        dispatch({
-            type: actionType.loginSucceeded,
-            user: user
+            type: userActionType.unauthorized
         });
     }
 };
@@ -64,7 +59,7 @@ const initialState = {
 export const reducer = (state, action) => {
     state = state || initialState;
 
-    if (action.type === actionType.loginStarted) {
+    if (action.type === userActionType.loginStarted) {
         return {
             ...state,
             error: null,
@@ -72,7 +67,7 @@ export const reducer = (state, action) => {
         };
     }
 
-    if (action.type === actionType.loginSucceeded) {
+    if (action.type === userActionType.loginSucceeded) {
         return {
             ...state,
             user: action.user,
@@ -81,7 +76,7 @@ export const reducer = (state, action) => {
         };
     }
 
-    if (action.type === actionType.loginFailed) {
+    if (action.type === userActionType.loginFailed) {
         return {
             ...state,
             user: null,
@@ -90,21 +85,21 @@ export const reducer = (state, action) => {
         };
     }
 
-    if (action.type === actionType.logout) {
+    if (action.type === userActionType.logout) {
         return {
             ...state,
             user: null
         };
     }
 
-    if (action.type === actionType.clearError) {
+    if (action.type === userActionType.clearError) {
         return {
             ...state,
             error: null
         };
     }
 
-    if (action.type === actionType.unauthorized) {
+    if (action.type === userActionType.unauthorized) {
         return {
             ...state,
             error: "You are not authorized for requested action.",

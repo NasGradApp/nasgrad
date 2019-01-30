@@ -2,10 +2,6 @@ import { apiHost } from "./apiConfig";
 
 export const apiUrl = `${apiHost}/api`;
 
-export const urlControlers = {
-    users: "users"
-};
-
 export const defaultPageSize = 20;
 
 export const storageKeys = {
@@ -59,5 +55,21 @@ export const actionTypes = {
         updatePictureStarted: "PICTURE_UPDATE_STARTED",
         updatePictureSucceded: "PICTURE_PDATE_SUCCEDED",
         updatePictureFailed: "PICTURE_UPDATE_FAILED"
-    }
+    },
+    approvalIssues: {
+        getPageStarted: "APPROVAL_ISSUES_GET_PAGE_STARTED",
+        getPageSucceeded: "APPROVAL_ISSUES_GET_PAGE_SUCCEEDED",
+        getPageFailed: "APPROVAL_ISSUES_GET_PAGE_FAILED",
+        setActivePage: "APPROVAL_ISSUES_SET_ACTIVE_PAGE",
+        setActiveViewType: "APPROVAL_ISSUE_SET_ACTIVE_VIEW_TYPE",
+        getIssueSucceeded: "APPROVAL_ISSUE_GET_SUCCEEDED",
+        getIssueFailed: "APPROVAL_ISSUE_GET_FAILED",
+        getIssueStarted: "APPROVAL_ISSUE_GET_STARTED",
+        approveIssueSucceeded: "APPROVAL_ISSUE_APPROVE_SUCCEEDED",
+        approveIssueFailed: "APPROVAL_ISSUE_APPROVE_FAILED",
+        approveIssueStarted: "APPROVAL_ISSUE_APPROVE_STARTED",
+        deleteIssueSucceeded: "APPROVAL_ISSUE_DELETE_SUCCEEDED",
+        deleteIssueFailed: "APPROVAL_ISSUE_DELETE_FAILED",
+        deleteIssueStarted: "APPROVAL_ISSUE_DELETE_STARTED"
+    },
 };

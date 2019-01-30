@@ -7,8 +7,8 @@ export const headers = (withAuth) => {
         "Content-Type": "application/json"
     };
 
-    if (withAuth && user && user.jwt) {
-        headers.Authorization = "Bearer " + user.jwt;
+    if (withAuth && user && user.jwt_token) {
+        headers.Authorization = "Bearer " + user.jwt_token;
     }
 
     return headers;

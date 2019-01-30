@@ -52,6 +52,7 @@ namespace NasGrad.API.Controllers
             {
                 jwt_token = AuthUtil.EncodeJWTToken(ci, options),
                 expiration_after = options.ValidFor.TotalSeconds,
+                is_user_admin = (role.Type == (int)AuthRoleType.Admin)
             });
         }
     }

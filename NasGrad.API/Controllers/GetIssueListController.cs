@@ -19,7 +19,14 @@ namespace NasGrad.API.Controllers
         public async Task<IActionResult> Get(string id)
         {
             var result = await _dbStorage.GetIssue(id);
-            return Ok(result);
+            if (result != null && result.IsApproved)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         [HttpGet]

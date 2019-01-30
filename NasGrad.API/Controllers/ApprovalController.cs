@@ -25,7 +25,35 @@ namespace NasGrad.API.Controllers
         [HttpGet("allIssues")]
         public async Task<IActionResult> Get()
         {
-            var result = await _dbStorage.GetAllIssues();
+            var result = await _dbStorage.GetAllIssuesForApproval();
+            return Ok(result);
+        }
+
+        [HttpGet("GetIssueDetails/{id}")]
+        public async Task<IActionResult> Get(string id)
+        {
+            var result = await _dbStorage.GetIssue(id);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+        [HttpPut("approveItem")]
+        public async Task<IActionResult> ApproveItem([FromBody]string id)
+        {
+            var result = await _dbStorage.ApproveIssue(id);
+            return Ok(result);
+        }
+
+        [HttpDelete("deleteItem")]
+        public async Task<IActionResult> DeleteItem([FromBody]string id)
+        {
+            var result = await _dbStorage.DeleteIssue(id);
             return Ok(result);
         }
     }

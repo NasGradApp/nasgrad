@@ -19,7 +19,7 @@ class IssuesView extends Component {
 
         const empty = (
             <div className="centar">
-                <h3>Nema prijavljenih problem</h3>
+                <h3>Nema prijavljenih problema</h3>
             </div>
         );
 

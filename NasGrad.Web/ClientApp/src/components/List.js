@@ -3,7 +3,7 @@ import Pager from './Pager';
 
 class List extends Component {
     render() {
-        const { items, activePage, setActivePage, totalPages, empty, itemComponent } = this.props;
+        const { items, activePage, setActivePage, totalPages, empty, itemComponent, funcApprove, funcDelete } = this.props;
         if (!items || items.length === 0) {
             return empty;
         }
@@ -19,6 +19,8 @@ class List extends Component {
                     {items.map(item => {
                         const data = {
                             item,
+                            funcApprove,
+                            funcDelete,
                             key: item.id
                         };
 
