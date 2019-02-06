@@ -4,23 +4,15 @@ import { bindActionCreators } from "redux";
 import { actionCreators as userActionCreators } from "../store/users.store";
 
 class Home extends Component {
-    onClickLogout(e) {
-        e.preventDefault();
-        this.props.userLogout();
-    }
+
     render() {
-        const { user } = this.props;
-        const message = (
-            <div>
-                <a className="btn" onClick={this.onClickLogout.bind(this)}>Logout</a>
-            </div>
-        );
+       
 
         return (
             <div>
                 <div>
                     <h1>NasGrad </h1>
-                    {(user) ? message : ""}
+                   
                 </div>
                 <hr />
                 <p>NasGrad (OurCity) is platform for providing easy way to communicate with public services. The main point of interest is giving the users the possibility (and power) to suggest possible improvements and to notify local government what should be the priority in the future investments.</p>

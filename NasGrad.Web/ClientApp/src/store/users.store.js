@@ -35,6 +35,7 @@ export const actionCreators = {
         dispatch({
             type: userActionType.logout
         });
+        
     },
     clearError: () => async (dispatch, getState) => {
         dispatch({

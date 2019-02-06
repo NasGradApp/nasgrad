@@ -12,14 +12,21 @@ class ApprovalList extends Component {
     }
     
     render() {
-        const handleApproveIssue = id =>  {
-            this.props.approveIssue(id);
+        const handleApproveIssue = id => {
+            var retVal = window.confirm('Da li ste sigurni da zelite da dozvolite ovaj prijavljeni problem ?');
+            if (retVal == true) {
+                this.props.approveIssue(id);
+            } 
+
+           
             
         }
 
         const handleDeleteIssue = id => {
-            this.props.deleteIssue(id);
-            
+            var retVal = window.confirm('Da li ste sigurni da zelite da obrisete ovaj prijavljeni problem ?');
+            if (retVal == true) {
+                this.props.deleteIssue(id);
+            }
         }
 
         const { activePage, setActivePage, activeViewType, setActiveViewType, issues } = this.props;
