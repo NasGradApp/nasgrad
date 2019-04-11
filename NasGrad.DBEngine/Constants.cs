@@ -2,12 +2,20 @@
 {
     public class Constants
     {
-        public const string TypeTableName = "Type";
-        public const string IssueTableName = "Issue";
-        public const string CategoryTableName = "Category";
-        public const string PictureTableName = "Picture";
-        public const string UserTableName = "User";
-        public const string RoleTableName = "Role";
+        public class TableName
+        {
+            public const string Type = "Type";
+            public const string Issue = "Issue";
+            public const string Category = "Category";
+            public const string Picture = "Picture";
+            public const string User = "User";
+            public const string Role = "Role";
+            public const string Region = "Region";
+            public const string CityService = "CityService";
+            public const string CityServiceTypes = "CityServiceTypes";
+        }
 
+        public const string CategoryAll = "*";
+        public const string RegionAll = "*";
     }
 }

@@ -1,16 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ImageMagick;
+using Microsoft.AspNetCore.Mvc;
 using NasGrad.DBEngine;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.IO;
-using ImageMagick;
 
 namespace NasGrad.API.Controllers
 {
@@ -35,9 +30,33 @@ namespace NasGrad.API.Controllers
             _dbStorage.InsertPicture(pict);
             issue.Pictures = new List<string> { pict.Id };
             issue.PicturePreview = ResizeImage(pict.Content, 128, 128);
+
+            issue.LikedCount = 1;
             _dbStorage.InsertNewIssue(issue);
 
             return Ok("Issue added");
+        }
+
+        [HttpPut("LikeIssue")]
+        public async Task<IActionResult> LikeIssue(string id)
+        {
+            if (await _dbStorage.UpdateIssueLike(id, 1))
+            {
+                return Ok("Issue updated");
+            }
+
+            return BadRequest();
+        }
+
+        [HttpPut("DislikeIssue")]
+        public async Task<IActionResult> DislikeIssue(string id)
+        {
+            if (await _dbStorage.UpdateIssueDislike(id, 1))
+            {
+                return Ok("Issue updated");
+            }
+
+            return BadRequest();
         }
 
         private string ResizeImage(string b64Img, int width, int height)

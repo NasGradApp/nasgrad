@@ -1,5 +1,0 @@
-{
-    "serverAddress": "localhost",
-    "serverPort": "27017",
-    "DbName": "NasGradDB"
-}

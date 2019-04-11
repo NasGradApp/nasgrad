@@ -1,27 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using NasGrad.API.Auth;
 using NasGrad.DBEngine;
 using Swashbuckle.AspNetCore.Swagger;
+using System;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace NasGrad.API
 {
     public class Startup
     {
+        private const string AuthLoginPath = "/security/auth/login";
+        private const string SwaggerSuffix = "/swagger/index.html";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -35,23 +35,20 @@ namespace NasGrad.API
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicyAnyOrigin",
-                    builder => 
-                 builder.AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader()
-                        .AllowCredentials());
+                    builder =>
+                        builder.AllowAnyOrigin()
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
+                            .AllowCredentials());
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new Info { Title = "NasGrad API", Version = "v1" });
+                options.SwaggerDoc("v1", new Info {Title = "NasGrad API", Version = "v1"});                
             });
-            services.ConfigureSwaggerGen(options =>
-            {
-                options.OperationFilter<SwaggerAuthHelper>();
-            });
+            services.ConfigureSwaggerGen(options => { options.OperationFilter<SwaggerAuthHelper>(); });
 
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
@@ -75,17 +72,20 @@ namespace NasGrad.API
                     };
                 });
 
+
+
             services.AddAuthorization(CreateAuthPolicies);
 
             var dbSettings = appSettings.DB;
-            
-            var dbClient = MongoDBUtil.CreateMongoClient(dbSettings.ServerAddress, dbSettings.ServerPort, dbSettings.Username, dbSettings.Password);            
-            var mongoDB = dbClient.GetDatabase(dbSettings.DbName);            
+
+            var dbClient = MongoDBUtil.CreateMongoClient(dbSettings.ServerAddress, dbSettings.ServerPort,
+                dbSettings.Username, dbSettings.Password);
+            var mongoDB = dbClient.GetDatabase(dbSettings.DbName);
 
             services.AddSingleton(typeof(MongoDB.Driver.IMongoDatabase), mongoDB);
             services.AddSingleton<IDBStorage, MongoDBStorage>();
         }
-        
+
 
         private static void CreateAuthPolicies(AuthorizationOptions options)
         {
@@ -107,10 +107,27 @@ namespace NasGrad.API
         {
             app.UseCors("CorsPolicyAnyOrigin");
 
-            if (env.IsDevelopment())
+            //if (env.IsDevelopment())
             {
+                app.UseStatusCodePages(context =>
+                {
+                    var response = context.HttpContext.Response;
+
+                    if (response.StatusCode == StatusCodes.Status401Unauthorized)
+                    {
+                        response.Redirect(AuthLoginPath);                        
+                    }
+
+                    return Task.CompletedTask;
+                });
+
+                RequireAuthenticationOn(app, "/swagger");
                 app.UseSwagger();
-                app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "NasGrad API v1"); });
+
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "NasGrad API v1");
+                });
             }
 
             app.UseAuthentication();
@@ -123,9 +140,42 @@ namespace NasGrad.API
             {
                 app.UseHsts();
             }
-            
+
             app.UseHttpsRedirection();
             app.UseMvc();
+        }
+
+
+        /// <summary>
+        /// Requires authentication for paths that starts with <paramref name="pathPrefix" />
+        /// </summary>
+        /// <param name="app">The application builder</param>
+        /// <param name="pathPrefix">The path prefix</param>
+        /// <returns>The application builder</returns>
+        private IApplicationBuilder RequireAuthenticationOn(IApplicationBuilder app, string pathPrefix)
+        {
+            return app.Use((context, next) =>
+            {
+                // First check if the current path is the swagger path
+                if (context.Request.Path.HasValue &&
+                    context.Request.Path.Value.StartsWith(pathPrefix, StringComparison.OrdinalIgnoreCase))
+                {
+                    // Secondly check if the current user is authenticated
+                    if (!context.User.Identity.IsAuthenticated)
+                    {
+                        string referer = context.Request.Headers["Referer"].ToString();
+                        var authLoginRedirect = context.Request.Host.Value + AuthLoginPath;
+                        var swaggerRedirect = context.Request.Host.Value + SwaggerSuffix;
+
+                        if ( (!referer.Contains(authLoginRedirect, StringComparison.OrdinalIgnoreCase) && 
+                              !referer.Contains(swaggerRedirect, StringComparison.OrdinalIgnoreCase)) ) 
+
+                            return context.ChallengeAsync();
+                    }
+                }
+
+                return next();
+            });
         }
     }
 }

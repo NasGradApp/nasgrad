@@ -129,16 +129,7 @@ class IssueDetail extends Component {
                     <label>Naslov:</label>
                     <input type="text" className="form-control" placeholder="Naslov" readOnly="true" defaultValue={issueObject.title} />
                 </div>
-                <div className="form-group">
-                    <label>Kategorija:</label>
-                    <ul>
-                        {issueObject.categories.map((item, rowIndex) =>
-                            (<li key={item}>
-                                {this.getCategoryName({ item })}
-                            </li>)
-                        )}
-                    </ul>
-                </div>
+
                 <div className="form-group">
                     <label>Tip problema:</label>
                     <input type="text" className="form-control" placeholder="Tip problema" readOnly="true" defaultValue={this.getProblemType(issueObject.issueType)} />

@@ -14,34 +14,32 @@ namespace NasGrad.DBEngine
         private readonly string _username;
         private readonly string _password;
         private readonly string _dbName;
-        private readonly string _adminUsername;
-        private readonly string _adminPassword;
         private readonly bool _doInitializeData;
-        private readonly bool _doInitializeAdminUser;
         private readonly bool _doDropDatabase;
 
         private IMongoDatabase _db;
-        private IMongoCollection<NasGradType> _configCollection;
+        private IMongoCollection<NasGradType> _typeCollection;
         private IMongoCollection<NasGradIssue> _issueCollection;
         private IMongoCollection<NasGradCategory> _categoryCollection;
         private IMongoCollection<NasGradPicture> _pictureCollection;
         private IMongoCollection<NasGradRole> _roleCollection;
         private IMongoCollection<NasGradUser> _userCollection;
+        private IMongoCollection<NasGradRegion> _regionCollection;
+        private IMongoCollection<NasGradCityService> _cityServiceCollection;
+        private IMongoCollection<NasGradCityServiceType> _cityServiceTypeCollection;
+        private List<Tuple<string, string, AuthRoleType>> _users;
 
 
         public MongoDBInitializer(string serverAddress, string serverPort, string username, string password,
-            string dbName, string adminUsername, string adminPassword, bool doInitializeData,
-            bool doInitializeAdminUser, bool doDropDatabase)
+            string dbName, List<Tuple<string, string, AuthRoleType>> users, bool doInitializeData, bool doDropDatabase)
         {
             _serverAddress = serverAddress;
             _serverPort = serverPort;
             _username = username;
             _password = password;
             _dbName = dbName;
-            _adminUsername = adminUsername;
-            _adminPassword = adminPassword;
+            _users = users; ;
             _doInitializeData = doInitializeData;
-            _doInitializeAdminUser = doInitializeAdminUser;
             _doDropDatabase = doDropDatabase;
         }
 
@@ -52,6 +50,19 @@ namespace NasGrad.DBEngine
                 CreateDatabase();
                 CreateCollections();
                 Seed();
+            }
+            catch (Exception e)
+            {
+                throw new DbInitializeException("Failed to initialize database.", e);
+            }
+        }
+
+        public void InitializeManually()
+        {
+            try
+            {
+                CreateDatabase();
+                CreateCollections();
             }
             catch (Exception e)
             {
@@ -76,12 +87,15 @@ namespace NasGrad.DBEngine
         {
             Console.WriteLine("Create collections");
 
-            _configCollection = _db.GetCollection<NasGradType>(Constants.TypeTableName);
-            _issueCollection = _db.GetCollection<NasGradIssue>(Constants.IssueTableName);
-            _categoryCollection = _db.GetCollection<NasGradCategory>(Constants.CategoryTableName);
-            _pictureCollection = _db.GetCollection<NasGradPicture>(Constants.PictureTableName);
-            _roleCollection = _db.GetCollection<NasGradRole>(Constants.RoleTableName);
-            _userCollection = _db.GetCollection<NasGradUser>(Constants.UserTableName);
+            _typeCollection = _db.GetCollection<NasGradType>(Constants.TableName.Type);
+            _issueCollection = _db.GetCollection<NasGradIssue>(Constants.TableName.Issue);
+            _categoryCollection = _db.GetCollection<NasGradCategory>(Constants.TableName.Category);
+            _pictureCollection = _db.GetCollection<NasGradPicture>(Constants.TableName.Picture);
+            _roleCollection = _db.GetCollection<NasGradRole>(Constants.TableName.Role);
+            _userCollection = _db.GetCollection<NasGradUser>(Constants.TableName.User);
+            _regionCollection = _db.GetCollection<NasGradRegion>(Constants.TableName.Region);
+            _cityServiceCollection = _db.GetCollection<NasGradCityService>(Constants.TableName.CityService);
+            _cityServiceTypeCollection = _db.GetCollection<NasGradCityServiceType>(Constants.TableName.CityServiceTypes);
         }
 
         private void Seed()
@@ -137,7 +151,7 @@ namespace NasGrad.DBEngine
 
                 if (initialRecords.Types != null && initialRecords.Types.Count > 0)
                 {
-                    _configCollection.InsertMany(initialRecords.Types);
+                    _typeCollection.InsertMany(initialRecords.Types);
                 }
 
                 if (initialRecords.Issues != null && initialRecords.Issues.Count > 0)
@@ -149,18 +163,34 @@ namespace NasGrad.DBEngine
                 {
                     _pictureCollection.InsertMany(initialRecords.Pictures);
                 }
+
+                if (initialRecords.Regions != null && initialRecords.Regions.Count > 0)
+                {
+                    _regionCollection.InsertMany(initialRecords.Regions);
+                }
+
+                if (initialRecords.CityServices != null && initialRecords.CityServices.Count > 0)
+                {
+                    _cityServiceCollection.InsertMany(initialRecords.CityServices);
+                }
+
+                if (initialRecords.CityServiceTypes != null && initialRecords.CityServiceTypes.Count > 0)
+                {
+                    _cityServiceTypeCollection.InsertMany(initialRecords.CityServiceTypes);
+                }
+
                 Console.WriteLine("Done");
             }
 
-            if (_doInitializeAdminUser)
+            foreach (var user in _users)
             {
-                Console.Write("Initializing admin user...");
+                Console.Write("Initializing {0} user...", user.Item3);
 
                 var newRole = new NasGradRole
                 {
                     Id = Guid.NewGuid().ToString(),
-                    Type = (int) AuthRoleType.Admin,
-                    Description = "Administrator of the system"
+                    Type = (int) user.Item3,
+                    Description = $"User with type of: {user.Item3}"
                 };
                 _roleCollection.InsertOne(newRole);
 
@@ -169,12 +199,66 @@ namespace NasGrad.DBEngine
                     Id = Guid.NewGuid().ToString(),
                     RoleId = newRole.Id,
                     Salt = Guid.NewGuid().ToString(),
-                    Username = _adminUsername
+                    Username = user.Item1
                 };
-                newUser.PasswordHash = CryptoUtil.GenerateHash(newUser.Salt + _adminPassword);
+                newUser.PasswordHash = CryptoUtil.GenerateHash(newUser.Salt + user.Item2);
                 _userCollection.InsertOne(newUser);
                 Console.WriteLine("Done");
             }
+        }
+
+        public string AddNewRegion(string regionCity)
+        {
+            var newId = Guid.NewGuid().ToString();
+            _regionCollection.InsertOne(new NasGradRegion
+            {
+                Id = newId,
+                City = regionCity
+            });
+
+            return newId;
+        }
+
+        public string AddNewType(string typeName, string typeDescription)
+        {
+            var newId = Guid.NewGuid().ToString();
+            _typeCollection.InsertOne(new NasGradType
+            {
+                Id = newId,
+                Name = typeName,
+                Description = typeDescription
+            });
+
+            return newId;
+        }
+
+        public string AddNewCityService(string cityServiceName, string cityServiceDescription, string cityServiceEmail,
+            string cityServiceRegionId)
+        {
+            var newId = Guid.NewGuid().ToString();
+            _cityServiceCollection.InsertOne(new NasGradCityService
+            {
+                Id = newId,
+                Name = cityServiceName,
+                Description = cityServiceDescription,
+                Email = cityServiceEmail,
+                Region = cityServiceRegionId,
+            });
+
+            return newId;
+        }
+
+        public string AddNewCityServiceType(string cityServiceId, string typeId)
+        {
+            var newId = Guid.NewGuid().ToString();
+            _cityServiceTypeCollection.InsertOne(new NasGradCityServiceType
+            {
+                Id = newId,
+                CityService = cityServiceId,
+                Type = typeId
+            });
+
+            return newId;
         }
     }
 
@@ -184,5 +268,8 @@ namespace NasGrad.DBEngine
         public List<NasGradIssue> Issues { get; set; }
         public List<NasGradCategory> Categories{ get; set; }
         public List<NasGradPicture> Pictures { get; set; }
+        public List<NasGradRegion> Regions { get; set; }
+        public List<NasGradCityService> CityServices { get; set; }
+        public List<NasGradCityServiceType> CityServiceTypes { get; set; }
     }
 }

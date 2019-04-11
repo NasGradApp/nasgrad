@@ -2,11 +2,9 @@
 
 namespace NasGrad.DBEngine
 {
-    public class NasGradType
+    public class NasGradType: BaseItem
     {
-        public string Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public List<string> Categories { get; set; }
     }
 }
