@@ -7,13 +7,16 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using NasGrad.API.Auth;
 using NasGrad.DBEngine;
 using Swashbuckle.AspNetCore.Swagger;
+using Swashbuckle.AspNetCore.SwaggerUI;
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace NasGrad.API
 {
@@ -46,11 +49,22 @@ namespace NasGrad.API
 
             services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new Info {Title = "NasGrad API", Version = "v1"});                
+                options.SwaggerDoc("v1", new Info {Title = "NasGrad API", Version = "v1"});
+                var security = new Dictionary<string, IEnumerable<string>>
+                {
+                    {"Bearer", new string[] { }},
+                };
+
+                options.AddSecurityDefinition("Bearer", new ApiKeyScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Write it as follows: Bearer yourJWTtoken",
+                    Name = "Authorization",
+                    In = "header",
+                    Type = "apiKey"
+                });
+                options.AddSecurityRequirement(security);
             });
-            services.ConfigureSwaggerGen(options => { options.OperationFilter<SwaggerAuthHelper>(); });
-
-
+            
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
             var appSettings = appSettingsSection.Get<AppSettings>();
@@ -84,6 +98,7 @@ namespace NasGrad.API
 
             services.AddSingleton(typeof(MongoDB.Driver.IMongoDatabase), mongoDB);
             services.AddSingleton<IDBStorage, MongoDBStorage>();
+            services.AddSingleton<IHostedService, GMailChecker>();
         }
 
 
@@ -127,6 +142,7 @@ namespace NasGrad.API
                 app.UseSwaggerUI(c =>
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "NasGrad API v1");
+                    c.DocExpansion(DocExpansion.None);                   
                 });
             }
 
