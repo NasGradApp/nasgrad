@@ -98,7 +98,6 @@ namespace NasGrad.API
 
             services.AddSingleton(typeof(MongoDB.Driver.IMongoDatabase), mongoDB);
             services.AddSingleton<IDBStorage, MongoDBStorage>();
-            services.AddSingleton<IHostedService, GMailChecker>();
         }
 
 
