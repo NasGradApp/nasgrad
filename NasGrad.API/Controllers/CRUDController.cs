@@ -21,6 +21,7 @@ namespace NasGrad.API.Controllers
 
         // GET: api/GetAllCityServices
         [HttpGet("GetAllCityServices")]
+		[AllowAnonymous]
         public async Task<IActionResult> GetAllCityServices()
         {
             var result = await _dbStorage.GetAllCityServices();
@@ -29,6 +30,7 @@ namespace NasGrad.API.Controllers
 
         // GET: api/GetCityService/5
         [HttpGet("GetCityService/{id}")]
+		[AllowAnonymous]
         public async Task<IActionResult> GetCityService(string id)
         {
             var result = await _dbStorage.GetCityService(id);
@@ -90,6 +92,7 @@ namespace NasGrad.API.Controllers
 
         // GET: api/GetAllRegions
         [HttpGet("GetAllRegions")]
+		[AllowAnonymous]
         public async Task<IActionResult> GetAllRegions()
         {
             var result = await _dbStorage.GetAllRegions();
@@ -98,6 +101,7 @@ namespace NasGrad.API.Controllers
 
         // GET: api/GetRegion/5
         [HttpGet("GetRegion/{id}")]
+		[AllowAnonymous]
         public async Task<IActionResult> GetRegion(string id)
         {
             var result = await _dbStorage.GetRegion(id);
@@ -160,6 +164,7 @@ namespace NasGrad.API.Controllers
 
         // GET: api/GetAllTypes
         [HttpGet("GetAllTypes")]
+		[AllowAnonymous]
         public async Task<IActionResult> GetAllTypes()
         {
             var result = await _dbStorage.GetAllTypes();
@@ -168,6 +173,7 @@ namespace NasGrad.API.Controllers
 
         // GET: api/GetType/5
         [HttpGet("GetType/{id}")]
+		[AllowAnonymous]
         public async Task<IActionResult> GetType(string id)
         {
             var result = await _dbStorage.GetNasGradType(id);
@@ -232,6 +238,7 @@ namespace NasGrad.API.Controllers
 
         // GET: api/GetAllCityServiceTypes
         [HttpGet("GetAllCityServiceTypes")]
+		[AllowAnonymous]
         public async Task<IActionResult> GetAllCityServiceTypes()
         {
             var result = await _dbStorage.GetAllCityServiceTypes();
@@ -240,6 +247,7 @@ namespace NasGrad.API.Controllers
 
         // GET: api/GetCityServiceType/5
         [HttpGet("GetCityServiceType/{id}")]
+		[AllowAnonymous]
         public async Task<IActionResult> GetCityServiceType(string id)
         {
             var result = await _dbStorage.GetNasGradCityServiceType(id);
